@@ -13,11 +13,7 @@
 
     body {
       margin: 0;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f5f5;
       color: #111;
     }
@@ -25,19 +21,14 @@
     .container {
       width: 100%;
       max-width: 620px;
-      margin: 0 auto;
+      margin: auto;
       padding: 24px 15px 40px;
-    }
-
-    .header {
-      margin-bottom: 20px;
     }
 
     h1 {
       margin: 0;
       font-size: 28px;
       font-weight: 800;
-      letter-spacing: -0.5px;
     }
 
     .subtitle {
@@ -51,7 +42,33 @@
       border-radius: 18px;
       padding: 20px;
       margin-bottom: 15px;
-      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 3px 15px rgba(0,0,0,.06);
+    }
+
+    /* SERVICE BUTTONS */
+
+    .service-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .service-button {
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #111;
+      padding: 14px 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .service-button.active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
     }
 
     label {
@@ -70,38 +87,35 @@
       font-size: 16px;
       margin-bottom: 16px;
       outline: none;
-      appearance: auto;
-    }
-
-    select:focus {
-      border-color: #111;
-    }
-
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 800;
     }
 
     .swap {
+      width: 100%;
+      border: 0;
       background: #eee;
       color: #111;
+      border-radius: 12px;
       padding: 11px;
       margin-bottom: 16px;
       font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .calculate {
+      width: 100%;
+      border: 0;
       background: #111;
       color: #fff;
+      border-radius: 12px;
       padding: 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: scale(.98);
     }
 
     .loading {
@@ -119,7 +133,7 @@
       border: 2px solid #ddd;
       border-top-color: #111;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin .8s linear infinite;
       vertical-align: -3px;
       margin-right: 6px;
     }
@@ -138,11 +152,17 @@
       background: #fff0f0;
       color: #b00020;
       font-size: 13px;
-      line-height: 1.45;
     }
 
     .result {
       display: none;
+    }
+
+    .service-result {
+      font-size: 13px;
+      font-weight: 700;
+      color: #777;
+      margin-bottom: 6px;
     }
 
     .route {
@@ -167,7 +187,6 @@
       font-weight: 900;
       line-height: 1.1;
       margin-top: 3px;
-      letter-spacing: -1px;
     }
 
     .stats {
@@ -211,10 +230,6 @@
       margin-top: 20px;
       line-height: 1.5;
     }
-
-    .hidden {
-      display: none !important;
-    }
   </style>
 </head>
 
@@ -222,16 +237,43 @@
 
 <div class="container">
 
-  <div class="header">
+  <div class="card">
+
     <h1>Community Fare Checker</h1>
+
     <div class="subtitle">
       Standard kampong-to-kampong community fare
     </div>
+
   </div>
 
 
-  <!-- INPUT CARD -->
+  <!-- SERVICE -->
+
   <div class="card">
+
+    <div class="service-buttons">
+
+      <button
+        id="runnerButton"
+        class="service-button active"
+        onclick="selectService('runner')"
+      >
+        📦 Runner
+      </button>
+
+      <button
+        id="rideButton"
+        class="service-button"
+        onclick="selectService('ride')"
+      >
+        🚗 Personal Ride
+      </button>
+
+    </div>
+
+
+    <!-- PICKUP -->
 
     <label for="pickup">
       Pickup Kampong
@@ -244,14 +286,17 @@
     </select>
 
 
+    <!-- SWAP -->
+
     <button
-      type="button"
       class="swap"
       onclick="swapLocations()"
     >
       ⇅ Swap Locations
     </button>
 
+
+    <!-- DESTINATION -->
 
     <label for="destination">
       Destination Kampong
@@ -265,41 +310,61 @@
 
 
     <button
-      type="button"
-      class="calculate"
       id="calculateButton"
+      class="calculate"
       onclick="calculateFare()"
     >
-      Calculate Fare
+      Calculate Runner Fare
     </button>
 
 
-    <div id="loading" class="loading">
+    <div
+      id="loading"
+      class="loading"
+    >
       <span class="spinner"></span>
-      Calculating road distance...
+      Calculating actual road distance...
     </div>
 
 
-    <div id="error" class="error"></div>
+    <div
+      id="error"
+      class="error"
+    ></div>
 
   </div>
 
 
-  <!-- RESULT CARD -->
-  <div id="result" class="card result">
+  <!-- RESULT -->
+
+  <div
+    id="result"
+    class="card result"
+  >
+
+    <div
+      class="service-result"
+      id="serviceResult"
+    >
+      RUNNER
+    </div>
+
 
     <div class="route">
+
       <span id="pickupName"></span>
 
       <span class="arrow">→</span>
 
       <span id="destinationName"></span>
+
     </div>
 
 
     <div class="fare-label">
       Standard Community Fare
     </div>
+
 
     <div
       class="fare"
@@ -312,49 +377,53 @@
     <div class="stats">
 
       <div class="stat">
+
         <div class="stat-label">
           Actual Road Distance
         </div>
 
         <div
-          class="stat-value"
           id="distance"
+          class="stat-value"
         >
           -
         </div>
+
       </div>
 
 
       <div class="stat">
+
         <div class="stat-label">
           Estimated Drive Time
         </div>
 
         <div
-          class="stat-value"
           id="duration"
+          class="stat-value"
         >
           -
         </div>
+
       </div>
 
     </div>
 
 
-    <div class="fare-basis">
-      <strong>Fare basis:</strong><br>
-      Minimum BND $5.00.<br>
-      5–20 km: BND $0.46/km.<br>
-      Above 20 km: BND $0.80/km.<br>
-      Final amount rounded to the nearest BND $0.50.
-    </div>
+    <div
+      id="fareBasis"
+      class="fare-basis"
+    ></div>
 
   </div>
 
 
   <div class="footer">
+
     Community Fare Checker • Brunei<br>
-    Standard reference fare only
+
+    Standard community reference fare
+
   </div>
 
 </div>
@@ -364,213 +433,282 @@
 
 /*
 ==========================================================
-KAMPONG DATABASE
+CURRENT SERVICE
 ==========================================================
+*/
 
-IMPORTANT:
+let currentService = "runner";
 
-Each kampong has one STANDARD REFERENCE POINT.
 
-The user does NOT enter an exact address.
+/*
+==========================================================
+KAMPONG DATABASE
 
-The routing API uses these reference points to calculate
-the actual driving distance between the two kampongs.
+Each location has a standard reference point.
 
-You can replace or expand these coordinates later after
-verifying the official/community reference points.
+The reference point is used for calculating actual road
+distance through OSRM.
 ==========================================================
 */
 
 const kampongs = [
 
+  /* BRUNEI-MUARA / BSB */
+
   {
     name: "Bandar Seri Begawan",
+    zone: "BSB",
     lat: 4.8903,
     lon: 114.9422
   },
 
   {
     name: "Gadong",
+    zone: "BSB",
     lat: 4.9231,
     lon: 114.9212
   },
 
   {
     name: "Kiulap",
+    zone: "BSB",
     lat: 4.8967,
     lon: 114.9224
   },
 
   {
     name: "Kiarong",
+    zone: "BSB",
     lat: 4.9006,
     lon: 114.9177
   },
 
   {
     name: "Menglait",
+    zone: "BSB",
     lat: 4.9158,
     lon: 114.9328
   },
 
   {
     name: "Beribi",
+    zone: "BSB",
     lat: 4.8730,
     lon: 114.9100
   },
 
   {
     name: "Batu Bersurat",
+    zone: "BSB",
     lat: 4.9180,
     lon: 114.9300
   },
 
   {
     name: "Tungku",
+    zone: "BSB",
     lat: 4.9300,
     lon: 114.8900
   },
 
   {
     name: "Rimba",
+    zone: "BSB",
     lat: 4.9000,
     lon: 114.8700
   },
 
   {
     name: "Mata-Mata",
+    zone: "BSB",
     lat: 4.8950,
     lon: 114.8900
   },
 
   {
     name: "Jerudong",
+    zone: "BSB",
     lat: 4.9600,
     lon: 114.8400
   },
 
   {
     name: "Sengkurong",
+    zone: "BSB",
     lat: 4.9700,
     lon: 114.8500
   },
 
   {
     name: "Kilanas",
+    zone: "BSB",
     lat: 4.8800,
     lon: 114.9000
   },
 
   {
     name: "Bunut",
+    zone: "BSB",
     lat: 4.8800,
     lon: 114.8700
   },
 
   {
     name: "Tanjong Bunut",
+    zone: "BSB",
     lat: 4.8700,
     lon: 114.8700
   },
 
   {
     name: "Madang",
+    zone: "BSB",
     lat: 4.9400,
     lon: 114.9600
   },
 
   {
     name: "Mentiri",
+    zone: "BSB",
     lat: 4.9700,
     lon: 114.9700
   },
 
   {
     name: "Muara",
+    zone: "BSB",
     lat: 5.0300,
     lon: 115.0700
   },
 
   {
     name: "Berakas",
+    zone: "BSB",
     lat: 4.9400,
     lon: 114.9300
   },
 
   {
     name: "Lambak",
+    zone: "BSB",
     lat: 4.9500,
     lon: 114.9400
   },
 
   {
     name: "Salambigar",
+    zone: "BSB",
     lat: 4.9700,
     lon: 114.9200
   },
 
   {
     name: "Serusop",
+    zone: "BSB",
     lat: 4.9500,
     lon: 114.9100
   },
 
   {
     name: "Anggerek Desa",
+    zone: "BSB",
     lat: 4.9300,
     lon: 114.9400
   },
 
   {
     name: "Katok",
+    zone: "BSB",
     lat: 4.9000,
     lon: 114.9600
   },
 
   {
     name: "Subok",
+    zone: "BSB",
     lat: 4.8900,
     lon: 114.9500
   },
 
+
+  /* TUTONG */
+
   {
     name: "Tutong",
+    zone: "TUTONG",
     lat: 4.8000,
     lon: 114.6500
   },
 
   {
     name: "Telisai",
+    zone: "TUTONG",
     lat: 4.6600,
     lon: 114.6800
   },
 
   {
     name: "Sungai Liang",
+    zone: "TUTONG",
     lat: 4.6500,
     lon: 114.5000
   },
 
+
+  /* BELAIT / KB */
+
   {
     name: "Lumut",
+    zone: "BELAIT",
     lat: 4.6600,
     lon: 114.4300
   },
 
   {
     name: "Seria",
+    zone: "BELAIT",
     lat: 4.6100,
     lon: 114.3300
   },
 
   {
     name: "Kuala Belait",
+    zone: "BELAIT",
     lat: 4.5800,
     lon: 114.1900
   },
 
   {
+    name: "Pandan",
+    zone: "BELAIT",
+    lat: 4.5900,
+    lon: 114.2100
+  },
+
+  {
+    name: "Mumong",
+    zone: "BELAIT",
+    lat: 4.6000,
+    lon: 114.2000
+  },
+
+  {
+    name: "Panaga",
+    zone: "BELAIT",
+    lat: 4.6400,
+    lon: 114.3400
+  },
+
+  {
+    name: "Sungai Teraban",
+    zone: "BELAIT",
+    lat: 4.5700,
+    lon: 114.1800
+  },
+
+  {
     name: "Labi",
+    zone: "BELAIT",
     lat: 4.4800,
     lon: 114.5000
   }
@@ -580,7 +718,7 @@ const kampongs = [
 
 /*
 ==========================================================
-SORT KAMPONGS
+SORT
 ==========================================================
 */
 
@@ -604,47 +742,43 @@ const destinationSelect =
 
 kampongs.forEach(kampong => {
 
-  const pickupOption =
+  const option1 =
     document.createElement("option");
 
-  pickupOption.value =
+  option1.value =
     kampong.name;
 
-  pickupOption.textContent =
+  option1.textContent =
     kampong.name;
 
 
-  const destinationOption =
+  const option2 =
     document.createElement("option");
 
-  destinationOption.value =
+  option2.value =
     kampong.name;
 
-  destinationOption.textContent =
+  option2.textContent =
     kampong.name;
 
 
-  pickupSelect.appendChild(
-    pickupOption
-  );
+  pickupSelect.appendChild(option1);
 
-  destinationSelect.appendChild(
-    destinationOption
-  );
+  destinationSelect.appendChild(option2);
 
 });
 
 
 /*
 ==========================================================
-FIND KAMPONG
+GET KAMPONG
 ==========================================================
 */
 
 function getKampong(name) {
 
   return kampongs.find(
-    kampong => kampong.name === name
+    k => k.name === name
   );
 
 }
@@ -652,58 +786,191 @@ function getKampong(name) {
 
 /*
 ==========================================================
-CALCULATE COMMUNITY FARE
-==========================================================
-
-V1 RULE:
-
-0–5 km
-BND $5 minimum
-
-5–20 km
-BND $0.46 per km
-
-Above 20 km
-BND $0.80 per km
-
-Then round to nearest BND $0.50.
+SERVICE SELECTOR
 ==========================================================
 */
 
-function calculateCommunityFare(distanceKm) {
+function selectService(service) {
 
-  let fare;
+  currentService = service;
 
 
-  if (distanceKm <= 5) {
+  const runnerButton =
+    document.getElementById("runnerButton");
 
-    fare = 5;
+  const rideButton =
+    document.getElementById("rideButton");
 
-  }
+  const calculateButton =
+    document.getElementById("calculateButton");
 
-  else if (distanceKm <= 20) {
 
-    fare = distanceKm * 0.46;
+  runnerButton.classList.remove("active");
+
+  rideButton.classList.remove("active");
+
+
+  if (service === "runner") {
+
+    runnerButton.classList.add("active");
+
+    calculateButton.textContent =
+      "Calculate Runner Fare";
 
   }
 
   else {
 
-    fare = distanceKm * 0.80;
+    rideButton.classList.add("active");
+
+    calculateButton.textContent =
+      "Calculate Personal Ride Fare";
+
+  }
+
+}
+
+
+/*
+==========================================================
+FARE CALCULATION
+
+BSB:
+
+RUNNER
+Minimum $5
+Maximum $10
+
+PERSONAL RIDE
+Minimum $5
+Maximum $15
+
+
+The formula below gives the BASE fare.
+
+The BSB maximum is then applied.
+
+NO $0.50 ROUNDING.
+==========================================================
+*/
+
+function calculateFareAmount(
+  distanceKm,
+  service,
+  isBSB
+) {
+
+  let fare;
+
+
+  /*
+  ----------------------------------------
+  RUNNER
+  ----------------------------------------
+  */
+
+  if (service === "runner") {
+
+    if (distanceKm <= 5) {
+
+      fare = 5;
+
+    }
+
+    else if (distanceKm <= 20) {
+
+      fare =
+        distanceKm * 0.40;
+
+    }
+
+    else {
+
+      fare =
+        distanceKm * 0.65;
+
+    }
+
+
+    fare =
+      Math.max(5, fare);
+
+
+    /*
+    BSB MAXIMUM
+    */
+
+    if (isBSB) {
+
+      fare =
+        Math.min(10, fare);
+
+    }
 
   }
 
 
-  // Minimum fare
-  fare = Math.max(
-    5,
-    fare
-  );
+  /*
+  ----------------------------------------
+  PERSONAL RIDE
+  ----------------------------------------
+  */
+
+  else {
+
+    if (distanceKm <= 5) {
+
+      fare = 5;
+
+    }
+
+    else if (distanceKm <= 20) {
+
+      fare =
+        distanceKm * 0.42;
+
+    }
+
+    else {
+
+      fare =
+        distanceKm * 0.70;
+
+    }
 
 
-  // Round to nearest $0.50
+    fare =
+      Math.max(5, fare);
+
+
+    /*
+    BSB MAXIMUM
+    */
+
+    if (isBSB) {
+
+      fare =
+        Math.min(15, fare);
+
+    }
+
+  }
+
+
+  /*
+  ----------------------------------------
+  SHOW TO NEAREST 10 CENTS
+
+  Example:
+  6.37 → 6.40
+  8.02 → 8.00
+
+  No 50-cent restriction.
+  ----------------------------------------
+  */
+
   fare =
-    Math.round(fare * 2) / 2;
+    Math.round(fare * 10) / 10;
 
 
   return fare;
@@ -713,7 +980,7 @@ function calculateCommunityFare(distanceKm) {
 
 /*
 ==========================================================
-FORMAT DRIVE TIME
+FORMAT TIME
 ==========================================================
 */
 
@@ -740,11 +1007,11 @@ function formatDuration(seconds) {
   const hours =
     Math.floor(minutes / 60);
 
-  const remainingMinutes =
+  const remaining =
     minutes % 60;
 
 
-  if (remainingMinutes === 0) {
+  if (remaining === 0) {
 
     return hours + " hr";
 
@@ -754,7 +1021,7 @@ function formatDuration(seconds) {
   return (
     hours +
     " hr " +
-    remainingMinutes +
+    remaining +
     " min"
   );
 
@@ -763,17 +1030,15 @@ function formatDuration(seconds) {
 
 /*
 ==========================================================
-GET ACTUAL ROAD DISTANCE FROM OSRM
-==========================================================
+OSRM ROAD ROUTING
 
-NO MAP IS USED.
+NO MAP.
 
-overview=false means OSRM does not return route
-geometry. We only request the road distance and duration.
+NO ROUTE DISPLAY.
 
-OSRM coordinate format:
+Only distance + duration are requested.
 
-longitude,latitude;longitude,latitude
+overview=false prevents route geometry from being returned.
 ==========================================================
 */
 
@@ -800,7 +1065,7 @@ async function getRoadRoute(
   if (!response.ok) {
 
     throw new Error(
-      "Routing server returned an error."
+      "Routing service error."
     );
 
   }
@@ -817,7 +1082,7 @@ async function getRoadRoute(
   ) {
 
     throw new Error(
-      "No driving route could be found."
+      "No driving route found."
     );
 
   }
@@ -856,11 +1121,16 @@ async function calculateFare() {
     document.getElementById("calculateButton");
 
 
-  // Reset error
-  error.style.display = "none";
+  error.style.display =
+    "none";
 
 
-  // Validate
+  /*
+  ----------------------------------------
+  VALIDATION
+  ----------------------------------------
+  */
+
   if (
     !pickupName ||
     !destinationName
@@ -916,9 +1186,24 @@ async function calculateFare() {
 
 
   /*
-  ------------------------------------------
-  SHOW LOADING
-  ------------------------------------------
+  ----------------------------------------
+  DETERMINE ZONE
+  ----------------------------------------
+
+  BSB maximum applies when both locations
+  are within the BSB zone.
+  ----------------------------------------
+  */
+
+  const isBSB =
+    pickup.zone === "BSB" &&
+    destination.zone === "BSB";
+
+
+  /*
+  ----------------------------------------
+  LOADING
+  ----------------------------------------
   */
 
   loading.style.display =
@@ -937,9 +1222,9 @@ async function calculateFare() {
   try {
 
     /*
-    ----------------------------------------
-    GET ACTUAL ROAD ROUTE
-    ----------------------------------------
+    --------------------------------------
+    ACTUAL ROAD ROUTE
+    --------------------------------------
     */
 
     const route =
@@ -949,32 +1234,42 @@ async function calculateFare() {
       );
 
 
-    /*
-    ----------------------------------------
-    OSRM RETURNS DISTANCE IN METRES
-    ----------------------------------------
-    */
-
     const distanceKm =
       route.distance / 1000;
 
 
     /*
-    ----------------------------------------
-    CALCULATE FARE
-    ----------------------------------------
+    --------------------------------------
+    FARE
+    --------------------------------------
     */
 
     const fare =
-      calculateCommunityFare(
-        distanceKm
+      calculateFareAmount(
+        distanceKm,
+        currentService,
+        isBSB
       );
 
 
     /*
-    ----------------------------------------
-    DISPLAY RESULT
-    ----------------------------------------
+    --------------------------------------
+    DISPLAY SERVICE
+    --------------------------------------
+    */
+
+    document.getElementById(
+      "serviceResult"
+    ).textContent =
+      currentService === "runner"
+        ? "📦 RUNNER"
+        : "🚗 PERSONAL RIDE";
+
+
+    /*
+    --------------------------------------
+    DISPLAY ROUTE
+    --------------------------------------
     */
 
     document.getElementById(
@@ -989,11 +1284,24 @@ async function calculateFare() {
       destination.name;
 
 
+    /*
+    --------------------------------------
+    DISTANCE
+    --------------------------------------
+    */
+
     document.getElementById(
       "distance"
     ).textContent =
-      distanceKm.toFixed(1) + " km";
+      distanceKm.toFixed(1) +
+      " km";
 
+
+    /*
+    --------------------------------------
+    TIME
+    --------------------------------------
+    */
 
     document.getElementById(
       "duration"
@@ -1003,6 +1311,12 @@ async function calculateFare() {
       );
 
 
+    /*
+    --------------------------------------
+    FARE
+    --------------------------------------
+    */
+
     document.getElementById(
       "fare"
     ).textContent =
@@ -1010,15 +1324,72 @@ async function calculateFare() {
       fare.toFixed(2);
 
 
-    result.style.display =
-      "block";
+    /*
+    --------------------------------------
+    FARE BASIS TEXT
+    --------------------------------------
+    */
+
+    let basisText;
+
+
+    if (
+      currentService === "runner"
+    ) {
+
+      basisText =
+        "Runner: $5 minimum.";
+
+      if (isBSB) {
+
+        basisText +=
+          " BSB maximum: $10.";
+
+      }
+
+    }
+
+    else {
+
+      basisText =
+        "Personal Ride: $5 minimum.";
+
+      if (isBSB) {
+
+        basisText +=
+          " BSB maximum: $15.";
+
+      }
+
+    }
+
+
+    if (!isBSB) {
+
+      basisText +=
+        " Non-BSB routes use the distance-based fare without the BSB maximum.";
+
+    }
+
+
+    document.getElementById(
+      "fareBasis"
+    ).innerHTML =
+      "<strong>Fare basis:</strong><br>" +
+      basisText +
+      "<br>Actual road distance used. " +
+      "Fare is calculated to the nearest $0.10.";
 
 
     /*
-    ----------------------------------------
-    SCROLL TO RESULT
-    ----------------------------------------
+    --------------------------------------
+    SHOW RESULT
+    --------------------------------------
     */
+
+    result.style.display =
+      "block";
+
 
     result.scrollIntoView({
       behavior: "smooth",
@@ -1026,6 +1397,7 @@ async function calculateFare() {
     });
 
   }
+
 
   catch (err) {
 
@@ -1039,6 +1411,7 @@ async function calculateFare() {
       "block";
 
   }
+
 
   finally {
 
@@ -1058,7 +1431,7 @@ async function calculateFare() {
 
 /*
 ==========================================================
-SWAP PICKUP / DESTINATION
+SWAP LOCATIONS
 ==========================================================
 */
 
