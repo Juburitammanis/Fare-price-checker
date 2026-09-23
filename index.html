@@ -1,21 +1,25 @@
 <!DOCTYPEhtml>
 <htmllang="en">
+
 <head>
+
 <metacharset="UTF-8">
 
 <meta
 name="viewport"
-content="width=device-width,initial-scale=1.0,maximum-scale=1.0"
+content="width=device-width,initial-scale=1.0"
 >
 
 <title>CommunityFareChecker</title>
 
-<!--LEAFLET-->
+
+<!--LEAFLETCSS-->
+
 <link
 rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-crossorigin=""
 >
+
 
 <style>
 
@@ -23,10 +27,9 @@ crossorigin=""
 box-sizing:border-box;
 }
 
-html,
+
 body{
 margin:0;
-padding:0;
 background:#f5f5f5;
 color:#111;
 font-family:
@@ -36,17 +39,15 @@ BlinkMacSystemFont,
 sans-serif;
 }
 
-body{
-padding-bottom:30px;
-}
 
 /*HEADER*/
 
 header{
 background:#111;
-color:#fff;
+color:white;
 padding:18px16px;
 }
+
 
 headerh1{
 margin:0;
@@ -54,42 +55,45 @@ font-size:21px;
 font-weight:800;
 }
 
+
 headerp{
 margin:4px00;
 font-size:12px;
 opacity:.7;
 }
 
-/*CONTAINER*/
+
+/*MAIN*/
 
 .container{
-width:100%;
 max-width:720px;
 margin:auto;
 padding:12px;
 }
 
+
 /*CARD*/
 
 .card{
-background:#fff;
+background:white;
 border-radius:16px;
 padding:14px;
 margin-bottom:12px;
-box-shadow:02px12pxrgba(0,0,0,.06);
+box-shadow:
+02px12pxrgba(0,0,0,.06);
 }
 
-/*LABEL*/
+
+/*LOCATION*/
 
 .label{
 font-size:11px;
 font-weight:800;
 color:#666;
-letter-spacing:.4px;
 margin-bottom:6px;
+letter-spacing:.4px;
 }
 
-/*SEARCH*/
 
 .search-row{
 display:flex;
@@ -97,250 +101,222 @@ gap:8px;
 margin-bottom:12px;
 }
 
-.search-wrapper{
+
+.search-box{
 flex:1;
 position:relative;
 }
 
+
 input{
 width:100%;
-height:46px;
-border:1pxsolid#ddd;
-border-radius:11px;
-padding:013px;
+height:48px;
+border:
+1pxsolid#ddd;
+border-radius:12px;
+padding:
+013px;
 font-size:14px;
-background:#fff;
 outline:none;
+background:white;
 }
+
 
 input:focus{
 border-color:#111;
 }
 
-.location-button{
+
+.location-btn{
 width:48px;
-min-width:48px;
-height:46px;
+height:48px;
 padding:0;
 background:#eee;
-color:#111;
 font-size:19px;
 }
 
-/*BUTTONS*/
 
-button{
-border:0;
-border-radius:11px;
-min-height:42px;
-padding:013px;
-font-weight:700;
-font-size:13px;
-cursor:pointer;
--webkit-tap-highlight-color:transparent;
-}
-
-.black{
-background:#111;
-color:#fff;
-}
-
-.grey{
-background:#eee;
-color:#111;
-}
-
-.swap{
-width:100%;
-background:#111;
-color:#fff;
-margin-bottom:13px;
-}
-
-/*SEARCHRESULTS*/
+/*SUGGESTIONS*/
 
 .suggestions{
 position:absolute;
 left:0;
 right:0;
-top:50px;
-z-index:9999;
+top:52px;
+
 background:white;
-border:1pxsolid#ddd;
-border-radius:11px;
+
+border:
+1pxsolid#ddd;
+
+border-radius:12px;
+
+box-shadow:
+08px25pxrgba(0,0,0,.15);
+
+z-index:9999;
+
 overflow:hidden;
-box-shadow:08px20pxrgba(0,0,0,.15);
 }
+
 
 .suggestion{
 padding:12px;
-border-bottom:1pxsolid#eee;
+border-bottom:
+1pxsolid#eee;
+
 font-size:13px;
 line-height:1.35;
+
 cursor:pointer;
 }
+
 
 .suggestion:last-child{
 border-bottom:0;
 }
 
+
 .suggestion:active{
 background:#eee;
 }
 
-/*AREAS*/
-
-.area-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px;
-}
-
-.area-button{
-min-height:38px;
-padding:5px;
-background:#f0f0f0;
-font-size:11px;
-}
 
 /*MAP*/
 
 #map{
 width:100%;
-height:430px;
-border-radius:13px;
+height:440px;
+border-radius:14px;
 overflow:hidden;
-background:#ddd;
 }
 
-.map-info{
+
+.map-help{
 text-align:center;
-font-size:11px;
-color:#777;
 margin-top:8px;
+color:#777;
+font-size:11px;
 }
 
-/*CALCULATE*/
 
-.calculate{
+/*BUTTON*/
+
+button{
+border:0;
+border-radius:11px;
+font-weight:700;
+cursor:pointer;
+-webkit-tap-highlight-color:transparent;
+}
+
+
+.black-btn{
 width:100%;
-height:52px;
+height:50px;
 background:#111;
 color:white;
-font-size:16px;
+font-size:15px;
 }
 
-.loading{
-display:none;
-text-align:center;
-padding:12px00;
-font-size:12px;
-color:#666;
-}
 
-.error{
-display:none;
-margin-top:10px;
-padding:11px;
-border-radius:10px;
-background:#fff0f0;
-color:#a00000;
-font-size:12px;
-line-height:1.4;
-}
+/*ROUTEINFO*/
 
-/*RESULTS*/
-
-#results{
+#routeInfo{
 display:none;
 }
 
-.summary{
+
+.route-grid{
 display:grid;
-grid-template-columns:1fr1fr;
+grid-template-columns:
+1fr1fr;
+
 gap:8px;
-margin-bottom:10px;
 }
 
-.summary-box{
+
+.route-box{
 background:#f3f3f3;
 border-radius:12px;
-padding:12px;
+padding:14px;
 text-align:center;
 }
 
-.summary-number{
-font-size:22px;
+
+.route-value{
+font-size:23px;
 font-weight:900;
 }
 
-.summary-label{
+
+.route-label{
 font-size:10px;
-color:#666;
+color:#777;
 margin-top:3px;
 }
 
-.fare{
-border-radius:13px;
-padding:13px;
-margin-top:8px;
-border:1pxsolid#ddd;
-}
 
-.fare.runner{
-border:2pxsolid#111;
-}
+/*STATUS*/
 
-.fare-title{
+#status{
+display:none;
+
+margin-top:10px;
+
+padding:11px;
+
+border-radius:10px;
+
+background:#f1f1f1;
+
 font-size:12px;
-font-weight:800;
-color:#666;
+
+text-align:center;
 }
 
-.fare-price{
-font-size:29px;
-font-weight:900;
-margin-top:2px;
+
+#error{
+display:none;
+
+margin-top:10px;
+
+padding:11px;
+
+border-radius:10px;
+
+background:#fff0f0;
+
+color:#a00000;
+
+font-size:12px;
 }
 
-.fare-note{
-font-size:10px;
-color:#777;
-margin-top:2px;
-}
-
-.disclaimer{
-font-size:10px;
-color:#777;
-line-height:1.5;
-margin-top:13px;
-}
-
-/*MOBILE*/
 
 @media(max-width:430px){
 
-.area-grid{
-grid-template-columns:repeat(2,1fr);
-}
-
 #map{
-height:380px;
+height:390px;
 }
 
 }
 
 </style>
+
 </head>
+
 
 <body>
 
+
 <header>
 
-<h1>CommunityFareChecker</h1>
+<h1>
+CommunityFareChecker
+</h1>
 
 <p>
-Community-standardfarereferenceforBrunei
+Bruneicommunityroute&farereference
 </p>
 
 </header>
@@ -353,16 +329,18 @@ Community-standardfarereferenceforBrunei
 
 <divclass="card">
 
+
 <divclass="label">
 PICKUP
 </div>
 
+
 <divclass="search-row">
 
-<divclass="search-wrapper">
+<divclass="search-box">
 
 <input
-id="pickupInput"
+id="pickup"
 type="text"
 placeholder="Searchpickuplocation"
 autocomplete="off"
@@ -371,14 +349,16 @@ autocomplete="off"
 <div
 id="pickupSuggestions"
 class="suggestions"
-style="display:none;"
+style="display:none"
 ></div>
 
 </div>
 
+
 <button
-class="location-button"
-onclick="useCurrentLocation('pickup')"
+class="location-btn"
+onclick="useMyLocation('pickup')"
+title="Usemylocation"
 >
 📍
 </button>
@@ -387,15 +367,16 @@ onclick="useCurrentLocation('pickup')"
 
 
 <divclass="label">
-DESTINATION
+GOINGTO
 </div>
+
 
 <divclass="search-row">
 
-<divclass="search-wrapper">
+<divclass="search-box">
 
 <input
-id="destinationInput"
+id="destination"
 type="text"
 placeholder="Searchdestination"
 autocomplete="off"
@@ -404,14 +385,16 @@ autocomplete="off"
 <div
 id="destinationSuggestions"
 class="suggestions"
-style="display:none;"
+style="display:none"
 ></div>
 
 </div>
 
+
 <button
-class="location-button"
-onclick="useCurrentLocation('destination')"
+class="location-btn"
+onclick="useMyLocation('destination')"
+title="Usemylocation"
 >
 📍
 </button>
@@ -419,188 +402,101 @@ onclick="useCurrentLocation('destination')"
 </div>
 
 
-<button
-class="swapblack"
-onclick="swapLocations()"
->
-⇅SwapPickup&Destination
-</button>
-
-
-<divclass="label">
-BRUNEIAREAQUICKSEARCH
-</div>
-
-<div
-id="areaGrid"
-class="area-grid"
-></div>
-
 </div>
 
 
-<!--MAPCARD-->
+<!--MAP-->
 
 <divclass="card">
 
 <divid="map"></div>
 
-<divclass="map-info">
+
+<divclass="map-help">
+
 Tapthemaptoplaceapin.
-Dragpinstofine-tunethelocation.
-</div>
+Dragpinstoadjustexactlocations.
 
 </div>
 
+</div>
 
-<!--CALCULATECARD-->
+
+<!--ROUTE-->
 
 <divclass="card">
 
+
 <button
-class="calculate"
-onclick="calculateRoute()"
+class="black-btn"
+onclick="getRoute()"
 >
-CalculateFare
+🚗CalculateRoute
 </button>
 
+
 <div
-id="loading"
-class="loading"
+id="status"
 >
 Calculatingdrivingroute...
 </div>
 
+
 <div
 id="error"
-class="error"
 ></div>
 
 </div>
 
 
-<!--RESULTS-->
+<!--ROUTERESULT-->
 
 <div
-id="results"
+id="routeInfo"
 class="card"
 >
 
-<divclass="summary">
 
-<divclass="summary-box">
+<divclass="route-grid">
+
+
+<divclass="route-box">
 
 <div
 id="distance"
-class="summary-number"
+class="route-value"
 >
 -
 </div>
 
-<divclass="summary-label">
+<divclass="route-label">
 DRIVINGDISTANCE
 </div>
 
 </div>
 
 
-<divclass="summary-box">
+<divclass="route-box">
 
 <div
-id="duration"
-class="summary-number"
+id="time"
+class="route-value"
 >
 -
 </div>
 
-<divclass="summary-label">
+<divclass="route-label">
 ESTIMATEDTIME
 </div>
 
 </div>
 
-</div>
-
-
-<divclass="fare">
-
-<divclass="fare-title">
-DARTREFERENCE
-</div>
-
-<div
-id="dartFare"
-class="fare-price"
->
-$0.00
-</div>
-
-<divclass="fare-note">
-ApproximateDARTreference
-</div>
 
 </div>
 
 
-<divclass="farerunner">
-
-<divclass="fare-title">
-PERSONALRUNNER
 </div>
 
-<div
-id="runnerFare"
-class="fare-price"
->
-$0.00
-</div>
-
-<divclass="fare-note">
-25%belowDART·Minimum$5
-</div>
-
-</div>
-
-
-<divclass="fare">
-
-<divclass="fare-title">
-PERSONALRIDE
-</div>
-
-<div
-id="rideFare"
-class="fare-price"
->
-$0.00
-</div>
-
-<divclass="fare-note">
-25%belowDART·Minimum$5
-</div>
-
-</div>
-
-
-<divclass="disclaimer">
-
-Communitypricingisasuggestedstandardandisnot
-operatedbyDARToranyothercompany.
-
-<br><br>
-
-Version1isapricecheckeronly.
-Nobooking,drivermatching,paymentprocessing,
-accountsorcommissioncollection.
-
-<br><br>
-
-Mapdata©OpenStreetMapcontributors.
-RoutingprovidedbyOSRM.
-
-</div>
-
-</div>
 
 </div>
 
@@ -609,80 +505,52 @@ RoutingprovidedbyOSRM.
 
 <script
 src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-crossorigin=""
 ></script>
 
 
 <script>
 
-document.addEventListener(
-"DOMContentLoaded",
-function(){
 
-
-/*=====================================================
-SETTINGS
-=====================================================*/
-
-constSETTINGS={
-
-runnerMinimum:5.00,
-
-rideMinimum:5.00,
-
-reduction:0.25,
-
-rounding:0.50
-
-};
-
-
-/*=====================================================
+/*=========================================================
 DEFAULTBRUNEILOCATION
-=====================================================*/
+=========================================================*/
 
-constDEFAULT_CENTER=[
+constBRUNEI_CENTER=[
 4.9031,
 114.9398
 ];
 
 
-/*=====================================================
-MAPINITIALIZATION
-=====================================================*/
+/*=========================================================
+MAP
+=========================================================*/
 
-constmap=L.map(
-"map",
-{
-zoomControl:true
-}
-).setView(
-DEFAULT_CENTER,
+constmap=
+L.map("map")
+.setView(
+BRUNEI_CENTER,
 12
 );
 
 
-/*=====================================================
-OPENSTREETMAPTILES
-=====================================================*/
+/*=========================================================
+OPENSTREETMAP
+=========================================================*/
 
-consttiles=L.tileLayer(
+L.tileLayer(
 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
 {
 maxZoom:19,
 
 attribution:
-'&copy;<ahref="https://www.openstreetmap.org/copyright"target="_blank">OpenStreetMap</a>contributors'
+'&copy;OpenStreetMapcontributors'
 }
-);
+).addTo(map);
 
 
-tiles.addTo(map);
-
-
-/*=====================================================
-FORCEMAPSIZECALCULATION
-=====================================================*/
+/*=========================================================
+MAPSIZEFIX
+=========================================================*/
 
 setTimeout(
 function(){
@@ -690,13 +558,13 @@ function(){
 map.invalidateSize();
 
 },
-300
+500
 );
 
 
-/*=====================================================
+/*=========================================================
 VARIABLES
-=====================================================*/
+=========================================================*/
 
 letpickupMarker=null;
 
@@ -706,139 +574,25 @@ letpickupCoords=null;
 
 letdestinationCoords=null;
 
-letrouteLayer=null;
+letrouteLine=null;
 
 
-/*=====================================================
-AREALIST
-=====================================================*/
-
-constareas=[
-
-"BandarSeriBegawan",
-
-"Gadong",
-
-"Kiulap",
-
-"Kiarong",
-
-"Menglait",
-
-"Beribi",
-
-"BatuBersurat",
-
-"Tungku",
-
-"Rimba",
-
-"Mata-Mata",
-
-"Jerudong",
-
-"Sengkurong",
-
-"Kilanas",
-
-"Bunut",
-
-"TanjongBunut",
-
-"Madang",
-
-"Mentiri",
-
-"Muara",
-
-"Berakas",
-
-"Lambak",
-
-"Salambigar",
-
-"Serusop",
-
-"BruneiInternationalAirport",
-
-"AnggerekDesa",
-
-"Katok",
-
-"Subok",
-
-"JalanKebangsaan",
-
-"JalanTutong",
-
-"Tutong",
-
-"Telisai",
-
-"KualaBelait",
-
-"Seria",
-
-"Lumut",
-
-"SungaiLiang",
-
-"Labi"
-
-];
-
-
-constareaGrid=
-document.getElementById(
-"areaGrid"
-);
-
-
-areas.forEach(
-function(area){
-
-constbutton=
-document.createElement(
-"button"
-);
-
-button.className=
-"area-button";
-
-button.textContent=
-area;
-
-button.onclick=
-function(){
-
-searchArea(area);
-
-};
-
-areaGrid.appendChild(
-button
-);
-
-}
-);
-
-
-/*=====================================================
+/*=========================================================
 PINICON
-=====================================================*/
+=========================================================*/
 
-functionpinIcon(label){
+functionmakeIcon(label){
 
 returnL.divIcon({
 
 className:"",
 
 html:`
+
 <divstyle="
 display:flex;
 flex-direction:column;
 align-items:center;
-pointer-events:none;
 ">
 
 <divstyle="
@@ -849,7 +603,7 @@ border-radius:7px;
 font-size:10px;
 font-weight:800;
 white-space:nowrap;
-box-shadow:02px5pxrgba(0,0,0,.25);
+box-shadow:02px6pxrgba(0,0,0,.3);
 ">
 ${label}
 </div>
@@ -861,10 +615,11 @@ background:#111;
 border:3pxsolidwhite;
 border-radius:50%;
 margin-top:3px;
-box-shadow:02px5pxrgba(0,0,0,.35);
+box-shadow:02px6pxrgba(0,0,0,.3);
 "></div>
 
 </div>
+
 `,
 
 iconSize:[
@@ -882,15 +637,16 @@ iconAnchor:[
 }
 
 
-/*=====================================================
+/*=========================================================
 SETPICKUP
-=====================================================*/
+=========================================================*/
 
 functionsetPickup(
 lat,
 lon,
 name
 ){
+
 
 pickupCoords=[
 lat,
@@ -914,9 +670,10 @@ L.marker(
 draggable:true,
 
 icon:
-pinIcon("PICKUP")
+makeIcon("PICKUP")
 }
-).addTo(map);
+)
+.addTo(map);
 
 
 pickupMarker.on(
@@ -934,7 +691,7 @@ pos.lng
 
 
 document.getElementById(
-"pickupInput"
+"pickup"
 ).value=
 "Selectedlocation";
 
@@ -948,7 +705,7 @@ pos.lng
 );
 
 document.getElementById(
-"pickupInput"
+"pickup"
 ).value=
 address;
 
@@ -959,7 +716,7 @@ address;
 
 
 document.getElementById(
-"pickupInput"
+"pickup"
 ).value=
 name||
 "Selectedlocation";
@@ -973,15 +730,16 @@ map.setView(
 }
 
 
-/*=====================================================
+/*=========================================================
 SETDESTINATION
-=====================================================*/
+=========================================================*/
 
 functionsetDestination(
 lat,
 lon,
 name
 ){
+
 
 destinationCoords=[
 lat,
@@ -1005,9 +763,10 @@ L.marker(
 draggable:true,
 
 icon:
-pinIcon("DESTINATION")
+makeIcon("DESTINATION")
 }
-).addTo(map);
+)
+.addTo(map);
 
 
 destinationMarker.on(
@@ -1025,7 +784,7 @@ pos.lng
 
 
 document.getElementById(
-"destinationInput"
+"destination"
 ).value=
 "Selectedlocation";
 
@@ -1039,7 +798,7 @@ pos.lng
 );
 
 document.getElementById(
-"destinationInput"
+"destination"
 ).value=
 address;
 
@@ -1050,7 +809,7 @@ address;
 
 
 document.getElementById(
-"destinationInput"
+"destination"
 ).value=
 name||
 "Selectedlocation";
@@ -1064,50 +823,47 @@ map.setView(
 }
 
 
-/*=====================================================
+/*=========================================================
 REVERSEGEOCODING
-=====================================================*/
+=========================================================*/
 
 asyncfunctionreverseGeocode(
 lat,
 lon
 ){
 
-constparams=
+
+consturl=
+"https://nominatim.openstreetmap.org/reverse?"+
+
 newURLSearchParams({
 
-format:"jsonv2",
+format:
+"jsonv2",
 
-lat:lat,
+lat:
+lat,
 
-lon:lon,
+lon:
+lon,
 
-zoom:18,
+zoom:
+18,
 
-addressdetails:1,
-
-"accept-language":"en"
+"accept-language":
+"en"
 
 });
 
 
 constresponse=
-awaitfetch(
-"https://nominatim.openstreetmap.org/reverse?"+
-params.toString(),
-{
-headers:{
-"Accept":
-"application/json"
-}
-}
-);
+awaitfetch(url);
 
 
 if(!response.ok){
 
 thrownewError(
-"Reversegeocodingfailed."
+"Unabletoidentifylocation."
 );
 
 }
@@ -1125,40 +881,43 @@ data.display_name||
 }
 
 
-/*=====================================================
-SEARCHFUNCTION
-=====================================================*/
-
-letsearchTimeout=null;
-
+/*=========================================================
+SEARCH
+=========================================================*/
 
 functionsetupSearch(
 inputId,
-suggestionsId,
+suggestionId,
 type
 ){
+
 
 constinput=
 document.getElementById(
 inputId
 );
 
-constsuggestions=
+
+constbox=
 document.getElementById(
-suggestionsId
+suggestionId
 );
+
+
+lettimer=null;
 
 
 input.addEventListener(
 "input",
 function(){
 
+
 constquery=
 input.value.trim();
 
 
 clearTimeout(
-searchTimeout
+timer
 );
 
 
@@ -1166,70 +925,63 @@ if(
 query.length<3
 ){
 
-suggestions.style.display=
+box.style.display=
 "none";
-
-suggestions.innerHTML=
-"";
 
 return;
 
 }
 
 
-/*
-Deliberatedelay.
-
-Nominatimisnotintendedfor
-instantclient-sideautocomplete.
-*/
-
-searchTimeout=
+timer=
 setTimeout(
 asyncfunction(){
 
-suggestions.style.display=
+
+box.style.display=
 "block";
 
-suggestions.innerHTML=
-`<divclass="suggestion">
-Searching...
-</div>`;
+
+box.innerHTML=
+`
+<divclass="suggestion">
+SearchingBrunei...
+</div>
+`;
 
 
 try{
 
-constparams=
+
+consturl=
+"https://nominatim.openstreetmap.org/search?"+
+
 newURLSearchParams({
 
-format:"jsonv2",
+format:
+"jsonv2",
 
 q:
 query+
 ",Brunei",
 
-countrycodes:"bn",
+countrycodes:
+"bn",
 
-limit:5,
+limit:
+5,
 
-addressdetails:1,
+addressdetails:
+1,
 
-"accept-language":"en"
+"accept-language":
+"en"
 
 });
 
 
 constresponse=
-awaitfetch(
-"https://nominatim.openstreetmap.org/search?"+
-params.toString(),
-{
-headers:{
-"Accept":
-"application/json"
-}
-}
-);
+awaitfetch(url);
 
 
 if(!response.ok){
@@ -1245,18 +997,20 @@ constresults=
 awaitresponse.json();
 
 
-suggestions.innerHTML=
+box.innerHTML=
 "";
 
 
 if(
-!results.length
+results.length===0
 ){
 
-suggestions.innerHTML=
-`<divclass="suggestion">
+box.innerHTML=
+`
+<divclass="suggestion">
 Nolocationfound
-</div>`;
+</div>
+`;
 
 return;
 
@@ -1265,6 +1019,7 @@ return;
 
 results.forEach(
 function(result){
+
 
 constitem=
 document.createElement(
@@ -1283,10 +1038,12 @@ result.display_name;
 item.onclick=
 function(){
 
+
 constlat=
 parseFloat(
 result.lat
 );
+
 
 constlon=
 parseFloat(
@@ -1316,13 +1073,13 @@ result.display_name
 }
 
 
-suggestions.style.display=
+box.style.display=
 "none";
 
 };
 
 
-suggestions.appendChild(
+box.appendChild(
 item
 );
 
@@ -1332,13 +1089,16 @@ item
 
 }catch(error){
 
-suggestions.innerHTML=
-`<divclass="suggestion">
+
+box.innerHTML=
+`
+<divclass="suggestion">
 Searchunavailable.
-Trytappingthemapinstead.
-</div>`;
+</div>
+`;
 
 }
+
 
 },
 1200
@@ -1350,106 +1110,31 @@ Trytappingthemapinstead.
 }
 
 
+/*=========================================================
+STARTSEARCH
+=========================================================*/
+
 setupSearch(
-"pickupInput",
+"pickup",
 "pickupSuggestions",
 "pickup"
 );
 
 
 setupSearch(
-"destinationInput",
+"destination",
 "destinationSuggestions",
 "destination"
 );
 
 
-/*=====================================================
-MAPCLICK
-=====================================================*/
+/*=========================================================
+MYLOCATION
+=========================================================*/
 
-map.on(
-"click",
-asyncfunction(event){
-
-constlat=
-event.latlng.lat;
-
-constlon=
-event.latlng.lng;
-
-
-/*
-Firsttap:
-Pickup
-
-Secondtap:
-Destination
-
-Afterbothexist:
-Replacedestination
-*/
-
-if(!pickupCoords){
-
-setPickup(
-lat,
-lon,
-"Selectedlocation"
-);
-
-try{
-
-constaddress=
-awaitreverseGeocode(
-lat,
-lon
-);
-
-document.getElementById(
-"pickupInput"
-).value=
-address;
-
-}catch{}
-
-return;
-
-}
-
-
-setDestination(
-lat,
-lon,
-"Selectedlocation"
-);
-
-
-try{
-
-constaddress=
-awaitreverseGeocode(
-lat,
-lon
-);
-
-document.getElementById(
-"destinationInput"
-).value=
-address;
-
-}catch{}
-
-}
-);
-
-
-/*=====================================================
-CURRENTLOCATION
-=====================================================*/
-
-window.useCurrentLocation=
+window.useMyLocation=
 function(type){
+
 
 if(
 !navigator.geolocation
@@ -1464,24 +1149,31 @@ return;
 }
 
 
+showStatus(
+"Gettingyourlocation..."
+);
+
+
 navigator.geolocation.getCurrentPosition(
 
 asyncfunction(position){
 
+
 constlat=
 position.coords.latitude;
+
 
 constlon=
 position.coords.longitude;
 
 
-letaddress=
-"Currentlocation";
+letname=
+"MyLocation";
 
 
 try{
 
-address=
+name=
 awaitreverseGeocode(
 lat,
 lon
@@ -1498,7 +1190,7 @@ type===
 setPickup(
 lat,
 lon,
-address
+name
 );
 
 }else{
@@ -1506,20 +1198,29 @@ address
 setDestination(
 lat,
 lon,
-address
+name
 );
 
 }
 
+
+hideStatus();
+
 },
+
 
 function(){
 
+
+hideStatus();
+
+
 showError(
-"Couldnotgetyourlocation.Pleaseallowlocationaccessinyourbrowser."
+"Unabletogetyourlocation.Pleaseallowlocationaccess."
 );
 
 },
+
 
 {
 enableHighAccuracy:
@@ -1530,6 +1231,7 @@ timeout:
 
 maximumAge:
 30000
+
 }
 
 );
@@ -1537,137 +1239,101 @@ maximumAge:
 };
 
 
-/*=====================================================
-AREASEARCH
-=====================================================*/
+/*=========================================================
+MAPTAP
+=========================================================*/
 
-window.searchArea=
-asyncfunction(area){
+map.on(
+"click",
+asyncfunction(event){
 
-hideError();
+
+constlat=
+event.latlng.lat;
+
+
+constlon=
+event.latlng.lng;
+
+
+/*
+Firsttap:
+pickup
+
+Secondtap:
+destination
+
+Furthertaps:
+destinationmoves
+*/
+
+
+if(!pickupCoords){
+
+
+setPickup(
+lat,
+lon,
+"Selectedlocation"
+);
 
 
 try{
 
-constparams=
-newURLSearchParams({
-
-format:"jsonv2",
-
-q:
-area+
-",Brunei",
-
-countrycodes:"bn",
-
-limit:1,
-
-addressdetails:1
-
-});
-
-
-constresponse=
-awaitfetch(
-"https://nominatim.openstreetmap.org/search?"+
-params.toString()
+constaddress=
+awaitreverseGeocode(
+lat,
+lon
 );
 
 
-constresults=
-awaitresponse.json();
+document.getElementById(
+"pickup"
+).value=
+address;
 
+}catch{}
 
-if(
-!results.length
-){
-
-thrownewError(
-"Areanotfound."
-);
-
-}
-
-
-constresult=
-results[0];
-
-
-setPickup(
-parseFloat(result.lat),
-parseFloat(result.lon),
-result.display_name
-);
-
-}catch{
-
-showError(
-"Couldnotfindthisarea."
-);
-
-}
-
-};
-
-
-/*=====================================================
-SWAP
-=====================================================*/
-
-window.swapLocations=
-function(){
-
-if(
-!pickupCoords||
-!destinationCoords
-){
 
 return;
 
 }
 
 
-constoldPickup=
-[...pickupCoords];
-
-constoldDestination=
-[...destinationCoords];
-
-
-constpickupName=
-document.getElementById(
-"pickupInput"
-).value;
-
-
-constdestinationName=
-document.getElementById(
-"destinationInput"
-).value;
-
-
-setPickup(
-oldDestination[0],
-oldDestination[1],
-destinationName
-);
-
-
 setDestination(
-oldPickup[0],
-oldPickup[1],
-pickupName
+lat,
+lon,
+"Selectedlocation"
 );
 
-};
+
+try{
+
+constaddress=
+awaitreverseGeocode(
+lat,
+lon
+);
 
 
-/*=====================================================
-ROUTING
-=====================================================*/
+document.getElementById(
+"destination"
+).value=
+address;
 
-window.calculateRoute=
+}catch{}
+
+}
+);
+
+
+/*=========================================================
+ROUTE
+=========================================================*/
+
+window.getRoute=
 asyncfunction(){
+
 
 hideError();
 
@@ -1675,7 +1341,7 @@ hideError();
 if(!pickupCoords){
 
 showError(
-"Pleaseselectapickuplocation."
+"Selectapickuplocationfirst."
 );
 
 return;
@@ -1686,7 +1352,7 @@ return;
 if(!destinationCoords){
 
 showError(
-"Pleaseselectadestination."
+"Selectadestinationfirst."
 );
 
 return;
@@ -1694,32 +1360,40 @@ return;
 }
 
 
-setLoading(true);
+showStatus(
+"Calculatingdrivingroute..."
+);
 
 
 try{
 
-conststartLon=
-pickupCoords[1];
 
-conststartLat=
-pickupCoords[0];
+conststart=
+`${pickupCoords[1]},${pickupCoords[0]}`;
 
-constendLon=
-destinationCoords[1];
 
-constendLat=
-destinationCoords[0];
+constend=
+`${destinationCoords[1]},${destinationCoords[0]}`;
 
 
 constcoordinates=
-`${startLon},${startLat};${endLon},${endLat}`;
+start+
+";"+
+end;
 
 
 consturl=
 "https://router.project-osrm.org/route/v1/driving/"+
+
 coordinates+
-"?overview=full&geometries=geojson&steps=false&alternatives=false";
+
+"?overview=full"+
+
+"&geometries=geojson"+
+
+"&steps=false"+
+
+"&alternatives=false";
 
 
 constresponse=
@@ -1729,7 +1403,7 @@ awaitfetch(url);
 if(!response.ok){
 
 thrownewError(
-"Routingserviceisunavailable."
+"Routingserviceunavailable."
 );
 
 }
@@ -1740,13 +1414,12 @@ awaitresponse.json();
 
 
 if(
-data.code!=="Ok"||
-!data.routes||
-!data.routes.length
+data.code!==
+"Ok"
 ){
 
 thrownewError(
-"Nodrivingroutewasfoundbetweentheselocations."
+"Nodrivingroutefound."
 );
 
 }
@@ -1756,70 +1429,59 @@ constroute=
 data.routes[0];
 
 
-constdistanceKm=
-route.distance/1000;
-
-
-constdurationMinutes=
-route.duration/60;
-
-
 /*REMOVEOLDROUTE*/
 
-if(routeLayer){
+if(routeLine){
 
 map.removeLayer(
-routeLayer
+routeLine
 );
 
 }
 
 
-/*ADDNEWROUTE*/
+/*DRAWROUTE*/
 
-routeLayer=
+routeLine=
 L.geoJSON(
 route.geometry,
 {
 
 style:{
 
-color:"#111",
+color:
+"#111",
 
-weight:5,
+weight:
+6,
 
-opacity:1
+opacity:
+1
 
 }
 
 }
-).addTo(map);
+)
+.addTo(map);
 
 
-/*FITMAP*/
-
-constbounds=
-routeLayer.getBounds();
-
-
-if(
-bounds.isValid()
-){
+/*FITROUTE*/
 
 map.fitBounds(
-bounds,
+routeLine.getBounds(),
 {
-padding:[
-35,
-35
-]
+padding:
+[30,30]
 }
 );
 
-}
-
 
 /*DISTANCE*/
+
+constdistanceKm=
+route.distance/
+1000;
+
 
 document.getElementById(
 "distance"
@@ -1830,64 +1492,32 @@ distanceKm.toFixed(1)+
 
 /*TIME*/
 
+constminutes=
+route.duration/
+60;
+
+
 document.getElementById(
-"duration"
+"time"
 ).textContent=
-formatDuration(
-durationMinutes
+formatTime(
+minutes
 );
 
 
-/*FARES*/
-
-constdart=
-calculateDartFare(
-distanceKm
-);
-
-
-construnner=
-calculateCommunityFare(
-dart,
-SETTINGS.runnerMinimum
-);
-
-
-constride=
-calculateCommunityFare(
-dart,
-SETTINGS.rideMinimum
-);
-
+/*SHOW*/
 
 document.getElementById(
-"dartFare"
-).textContent=
-formatMoney(dart);
-
-
-document.getElementById(
-"runnerFare"
-).textContent=
-formatMoney(runner);
-
-
-document.getElementById(
-"rideFare"
-).textContent=
-formatMoney(ride);
-
-
-/*SHOWRESULTS*/
-
-document.getElementById(
-"results"
+"routeInfo"
 ).style.display=
 "block";
 
 
+hideStatus();
+
+
 document.getElementById(
-"results"
+"routeInfo"
 ).scrollIntoView({
 behavior:
 "smooth"
@@ -1896,150 +1526,28 @@ behavior:
 
 }catch(error){
 
+
+hideStatus();
+
+
 showError(
 error.message||
-"Couldnotcalculateroute."
+"Unabletocalculateroute."
 );
 
 }
-
-
-setLoading(false);
 
 };
 
 
-/*=====================================================
-DARTREFERENCE
-=====================================================*/
+/*=========================================================
+TIMEFORMAT
+=========================================================*/
 
-functioncalculateDartFare(
-distanceKm
-){
-
-letfare;
-
-
-/*
-V1approximation:
-
-Under5km:
-$5
-
-5–20km:
-$0.46/km
-
-Over20km:
-$0.80/km
-*/
-
-
-if(
-distanceKm<5
-){
-
-fare=5.00;
-
-}
-
-elseif(
-distanceKm<=20
-){
-
-fare=
-distanceKm*
-0.46;
-
-}
-
-else{
-
-fare=
-distanceKm*
-0.80;
-
-}
-
-
-returnroundToHalf(
-fare
-);
-
-}
-
-
-/*=====================================================
-COMMUNITYPRICE
-=====================================================*/
-
-functioncalculateCommunityFare(
-dartFare,
-minimum
-){
-
-letprice=
-dartFare*
-(
-1-
-SETTINGS.reduction
-);
-
-
-price=
-Math.max(
-price,
-minimum
-);
-
-
-returnroundToHalf(
-price
-);
-
-}
-
-
-/*=====================================================
-ROUNDTO$0.50
-=====================================================*/
-
-functionroundToHalf(
-value
-){
-
-return(
-Math.round(
-value/0.50
-)*
-0.50
-);
-
-}
-
-
-/*=====================================================
-MONEY
-=====================================================*/
-
-functionformatMoney(
-value
-){
-
-return(
-"$"+
-value.toFixed(2)
-);
-
-}
-
-
-/*=====================================================
-TIME
-=====================================================*/
-
-functionformatDuration(
+functionformatTime(
 minutes
 ){
+
 
 minutes=
 Math.round(
@@ -2091,43 +1599,59 @@ remaining+
 }
 
 
-/*=====================================================
-LOADING
-=====================================================*/
+/*=========================================================
+STATUS
+=========================================================*/
 
-functionsetLoading(
-visible
+functionshowStatus(
+message
 ){
 
+conststatus=
 document.getElementById(
-"loading"
-).style.display=
-visible
-?"block"
-:"none";
+"status"
+);
+
+
+status.textContent=
+message;
+
+
+status.style.display=
+"block";
 
 }
 
 
-/*=====================================================
+functionhideStatus(){
+
+document.getElementById(
+"status"
+).style.display=
+"none";
+
+}
+
+
+/*=========================================================
 ERROR
-=====================================================*/
+=========================================================*/
 
 functionshowError(
 message
 ){
 
-constbox=
+consterror=
 document.getElementById(
 "error"
 );
 
 
-box.textContent=
+error.textContent=
 message;
 
 
-box.style.display=
+error.style.display=
 "block";
 
 }
@@ -2143,19 +1667,21 @@ document.getElementById(
 }
 
 
-/*=====================================================
-CLOSESEARCHRESULTS
-=====================================================*/
+/*=========================================================
+CLOSESEARCHDROPDOWNS
+=========================================================*/
 
 document.addEventListener(
 "click",
 function(event){
 
+
 if(
 !event.target.closest(
-".search-wrapper"
+".search-box"
 )
 ){
+
 
 document.getElementById(
 "pickupSuggestions"
@@ -2171,11 +1697,6 @@ document.getElementById(
 }
 
 }
-);
-
-
-}
-
 );
 
 </script>
