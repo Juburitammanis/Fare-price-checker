@@ -1,1703 +1,1083 @@
-<!DOCTYPEhtml>
-<htmllang="en">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-<metacharset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0"
->
-
-<title>CommunityFareChecker</title>
-
-
-<!--LEAFLETCSS-->
-
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
->
-
-
-<style>
-
-*{
-box-sizing:border-box;
-}
-
-
-body{
-margin:0;
-background:#f5f5f5;
-color:#111;
-font-family:
--apple-system,
-BlinkMacSystemFont,
-"SegoeUI",
-sans-serif;
-}
-
-
-/*HEADER*/
-
-header{
-background:#111;
-color:white;
-padding:18px16px;
-}
-
-
-headerh1{
-margin:0;
-font-size:21px;
-font-weight:800;
-}
-
-
-headerp{
-margin:4px00;
-font-size:12px;
-opacity:.7;
-}
-
-
-/*MAIN*/
-
-.container{
-max-width:720px;
-margin:auto;
-padding:12px;
-}
-
-
-/*CARD*/
-
-.card{
-background:white;
-border-radius:16px;
-padding:14px;
-margin-bottom:12px;
-box-shadow:
-02px12pxrgba(0,0,0,.06);
-}
-
-
-/*LOCATION*/
-
-.label{
-font-size:11px;
-font-weight:800;
-color:#666;
-margin-bottom:6px;
-letter-spacing:.4px;
-}
-
-
-.search-row{
-display:flex;
-gap:8px;
-margin-bottom:12px;
-}
-
-
-.search-box{
-flex:1;
-position:relative;
-}
-
-
-input{
-width:100%;
-height:48px;
-border:
-1pxsolid#ddd;
-border-radius:12px;
-padding:
-013px;
-font-size:14px;
-outline:none;
-background:white;
-}
-
-
-input:focus{
-border-color:#111;
-}
-
-
-.location-btn{
-width:48px;
-height:48px;
-padding:0;
-background:#eee;
-font-size:19px;
-}
-
-
-/*SUGGESTIONS*/
-
-.suggestions{
-position:absolute;
-left:0;
-right:0;
-top:52px;
-
-background:white;
-
-border:
-1pxsolid#ddd;
-
-border-radius:12px;
-
-box-shadow:
-08px25pxrgba(0,0,0,.15);
-
-z-index:9999;
-
-overflow:hidden;
-}
-
-
-.suggestion{
-padding:12px;
-border-bottom:
-1pxsolid#eee;
-
-font-size:13px;
-line-height:1.35;
-
-cursor:pointer;
-}
-
-
-.suggestion:last-child{
-border-bottom:0;
-}
-
-
-.suggestion:active{
-background:#eee;
-}
-
-
-/*MAP*/
-
-#map{
-width:100%;
-height:440px;
-border-radius:14px;
-overflow:hidden;
-}
-
-
-.map-help{
-text-align:center;
-margin-top:8px;
-color:#777;
-font-size:11px;
-}
-
-
-/*BUTTON*/
-
-button{
-border:0;
-border-radius:11px;
-font-weight:700;
-cursor:pointer;
--webkit-tap-highlight-color:transparent;
-}
-
-
-.black-btn{
-width:100%;
-height:50px;
-background:#111;
-color:white;
-font-size:15px;
-}
-
-
-/*ROUTEINFO*/
-
-#routeInfo{
-display:none;
-}
-
-
-.route-grid{
-display:grid;
-grid-template-columns:
-1fr1fr;
-
-gap:8px;
-}
-
-
-.route-box{
-background:#f3f3f3;
-border-radius:12px;
-padding:14px;
-text-align:center;
-}
-
-
-.route-value{
-font-size:23px;
-font-weight:900;
-}
-
-
-.route-label{
-font-size:10px;
-color:#777;
-margin-top:3px;
-}
-
-
-/*STATUS*/
-
-#status{
-display:none;
-
-margin-top:10px;
-
-padding:11px;
-
-border-radius:10px;
-
-background:#f1f1f1;
-
-font-size:12px;
-
-text-align:center;
-}
-
-
-#error{
-display:none;
-
-margin-top:10px;
-
-padding:11px;
-
-border-radius:10px;
-
-background:#fff0f0;
-
-color:#a00000;
-
-font-size:12px;
-}
-
-
-@media(max-width:430px){
-
-#map{
-height:390px;
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Community Fare Checker</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 24px 15px 40px;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    select {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 16px;
+      margin-bottom: 16px;
+      outline: none;
+      appearance: auto;
+    }
+
+    select:focus {
+      border-color: #111;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .swap {
+      background: #eee;
+      color: #111;
+      padding: 11px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .calculate {
+      background: #111;
+      color: #fff;
+      padding: 16px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 15px 5px 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ddd;
+      border-top-color: #111;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: -3px;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error {
+      display: none;
+      margin-top: 14px;
+      padding: 13px;
+      border-radius: 11px;
+      background: #fff0f0;
+      color: #b00020;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .result {
+      display: none;
+    }
+
+    .route {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .arrow {
+      color: #888;
+      padding: 0 4px;
+    }
+
+    .fare-label {
+      margin-top: 22px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    .fare {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-top: 3px;
+      letter-spacing: -1px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .stat {
+      background: #f5f5f5;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .stat-label {
+      color: #777;
+      font-size: 12px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .fare-basis {
+      margin-top: 15px;
+      padding: 13px;
+      background: #f7f7f7;
+      border-radius: 12px;
+      color: #666;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      color: #999;
+      font-size: 11px;
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
-
 
 <body>
 
+<div class="container">
 
-<header>
-
-<h1>
-CommunityFareChecker
-</h1>
-
-<p>
-Bruneicommunityroute&farereference
-</p>
-
-</header>
+  <div class="header">
+    <h1>Community Fare Checker</h1>
+    <div class="subtitle">
+      Standard kampong-to-kampong community fare
+    </div>
+  </div>
 
 
-<divclass="container">
+  <!-- INPUT CARD -->
+  <div class="card">
+
+    <label for="pickup">
+      Pickup Kampong
+    </label>
+
+    <select id="pickup">
+      <option value="">
+        Select pickup kampong
+      </option>
+    </select>
 
 
-<!--LOCATIONCARD-->
-
-<divclass="card">
-
-
-<divclass="label">
-PICKUP
-</div>
-
-
-<divclass="search-row">
-
-<divclass="search-box">
-
-<input
-id="pickup"
-type="text"
-placeholder="Searchpickuplocation"
-autocomplete="off"
->
-
-<div
-id="pickupSuggestions"
-class="suggestions"
-style="display:none"
-></div>
-
-</div>
+    <button
+      type="button"
+      class="swap"
+      onclick="swapLocations()"
+    >
+      ⇅ Swap Locations
+    </button>
 
 
-<button
-class="location-btn"
-onclick="useMyLocation('pickup')"
-title="Usemylocation"
->
-📍
-</button>
+    <label for="destination">
+      Destination Kampong
+    </label>
 
-</div>
-
-
-<divclass="label">
-GOINGTO
-</div>
+    <select id="destination">
+      <option value="">
+        Select destination kampong
+      </option>
+    </select>
 
 
-<divclass="search-row">
-
-<divclass="search-box">
-
-<input
-id="destination"
-type="text"
-placeholder="Searchdestination"
-autocomplete="off"
->
-
-<div
-id="destinationSuggestions"
-class="suggestions"
-style="display:none"
-></div>
-
-</div>
+    <button
+      type="button"
+      class="calculate"
+      id="calculateButton"
+      onclick="calculateFare()"
+    >
+      Calculate Fare
+    </button>
 
 
-<button
-class="location-btn"
-onclick="useMyLocation('destination')"
-title="Usemylocation"
->
-📍
-</button>
-
-</div>
+    <div id="loading" class="loading">
+      <span class="spinner"></span>
+      Calculating road distance...
+    </div>
 
 
-</div>
+    <div id="error" class="error"></div>
+
+  </div>
 
 
-<!--MAP-->
+  <!-- RESULT CARD -->
+  <div id="result" class="card result">
 
-<divclass="card">
+    <div class="route">
+      <span id="pickupName"></span>
 
-<divid="map"></div>
+      <span class="arrow">→</span>
 
-
-<divclass="map-help">
-
-Tapthemaptoplaceapin.
-Dragpinstoadjustexactlocations.
-
-</div>
-
-</div>
+      <span id="destinationName"></span>
+    </div>
 
 
-<!--ROUTE-->
+    <div class="fare-label">
+      Standard Community Fare
+    </div>
 
-<divclass="card">
-
-
-<button
-class="black-btn"
-onclick="getRoute()"
->
-🚗CalculateRoute
-</button>
-
-
-<div
-id="status"
->
-Calculatingdrivingroute...
-</div>
+    <div
+      class="fare"
+      id="fare"
+    >
+      BND $5.00
+    </div>
 
 
-<div
-id="error"
-></div>
+    <div class="stats">
 
-</div>
+      <div class="stat">
+        <div class="stat-label">
+          Actual Road Distance
+        </div>
 
-
-<!--ROUTERESULT-->
-
-<div
-id="routeInfo"
-class="card"
->
-
-
-<divclass="route-grid">
+        <div
+          class="stat-value"
+          id="distance"
+        >
+          -
+        </div>
+      </div>
 
 
-<divclass="route-box">
+      <div class="stat">
+        <div class="stat-label">
+          Estimated Drive Time
+        </div>
 
-<div
-id="distance"
-class="route-value"
->
--
-</div>
+        <div
+          class="stat-value"
+          id="duration"
+        >
+          -
+        </div>
+      </div>
 
-<divclass="route-label">
-DRIVINGDISTANCE
-</div>
+    </div>
+
+
+    <div class="fare-basis">
+      <strong>Fare basis:</strong><br>
+      Minimum BND $5.00.<br>
+      5–20 km: BND $0.46/km.<br>
+      Above 20 km: BND $0.80/km.<br>
+      Final amount rounded to the nearest BND $0.50.
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+    Community Fare Checker • Brunei<br>
+    Standard reference fare only
+  </div>
 
 </div>
-
-
-<divclass="route-box">
-
-<div
-id="time"
-class="route-value"
->
--
-</div>
-
-<divclass="route-label">
-ESTIMATEDTIME
-</div>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-<!--LEAFLETJS-->
-
-<script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-></script>
 
 
 <script>
 
+/*
+==========================================================
+KAMPONG DATABASE
+==========================================================
 
-/*=========================================================
-DEFAULTBRUNEILOCATION
-=========================================================*/
+IMPORTANT:
 
-constBRUNEI_CENTER=[
-4.9031,
-114.9398
+Each kampong has one STANDARD REFERENCE POINT.
+
+The user does NOT enter an exact address.
+
+The routing API uses these reference points to calculate
+the actual driving distance between the two kampongs.
+
+You can replace or expand these coordinates later after
+verifying the official/community reference points.
+==========================================================
+*/
+
+const kampongs = [
+
+  {
+    name: "Bandar Seri Begawan",
+    lat: 4.8903,
+    lon: 114.9422
+  },
+
+  {
+    name: "Gadong",
+    lat: 4.9231,
+    lon: 114.9212
+  },
+
+  {
+    name: "Kiulap",
+    lat: 4.8967,
+    lon: 114.9224
+  },
+
+  {
+    name: "Kiarong",
+    lat: 4.9006,
+    lon: 114.9177
+  },
+
+  {
+    name: "Menglait",
+    lat: 4.9158,
+    lon: 114.9328
+  },
+
+  {
+    name: "Beribi",
+    lat: 4.8730,
+    lon: 114.9100
+  },
+
+  {
+    name: "Batu Bersurat",
+    lat: 4.9180,
+    lon: 114.9300
+  },
+
+  {
+    name: "Tungku",
+    lat: 4.9300,
+    lon: 114.8900
+  },
+
+  {
+    name: "Rimba",
+    lat: 4.9000,
+    lon: 114.8700
+  },
+
+  {
+    name: "Mata-Mata",
+    lat: 4.8950,
+    lon: 114.8900
+  },
+
+  {
+    name: "Jerudong",
+    lat: 4.9600,
+    lon: 114.8400
+  },
+
+  {
+    name: "Sengkurong",
+    lat: 4.9700,
+    lon: 114.8500
+  },
+
+  {
+    name: "Kilanas",
+    lat: 4.8800,
+    lon: 114.9000
+  },
+
+  {
+    name: "Bunut",
+    lat: 4.8800,
+    lon: 114.8700
+  },
+
+  {
+    name: "Tanjong Bunut",
+    lat: 4.8700,
+    lon: 114.8700
+  },
+
+  {
+    name: "Madang",
+    lat: 4.9400,
+    lon: 114.9600
+  },
+
+  {
+    name: "Mentiri",
+    lat: 4.9700,
+    lon: 114.9700
+  },
+
+  {
+    name: "Muara",
+    lat: 5.0300,
+    lon: 115.0700
+  },
+
+  {
+    name: "Berakas",
+    lat: 4.9400,
+    lon: 114.9300
+  },
+
+  {
+    name: "Lambak",
+    lat: 4.9500,
+    lon: 114.9400
+  },
+
+  {
+    name: "Salambigar",
+    lat: 4.9700,
+    lon: 114.9200
+  },
+
+  {
+    name: "Serusop",
+    lat: 4.9500,
+    lon: 114.9100
+  },
+
+  {
+    name: "Anggerek Desa",
+    lat: 4.9300,
+    lon: 114.9400
+  },
+
+  {
+    name: "Katok",
+    lat: 4.9000,
+    lon: 114.9600
+  },
+
+  {
+    name: "Subok",
+    lat: 4.8900,
+    lon: 114.9500
+  },
+
+  {
+    name: "Tutong",
+    lat: 4.8000,
+    lon: 114.6500
+  },
+
+  {
+    name: "Telisai",
+    lat: 4.6600,
+    lon: 114.6800
+  },
+
+  {
+    name: "Sungai Liang",
+    lat: 4.6500,
+    lon: 114.5000
+  },
+
+  {
+    name: "Lumut",
+    lat: 4.6600,
+    lon: 114.4300
+  },
+
+  {
+    name: "Seria",
+    lat: 4.6100,
+    lon: 114.3300
+  },
+
+  {
+    name: "Kuala Belait",
+    lat: 4.5800,
+    lon: 114.1900
+  },
+
+  {
+    name: "Labi",
+    lat: 4.4800,
+    lon: 114.5000
+  }
+
 ];
-
-
-/*=========================================================
-MAP
-=========================================================*/
-
-constmap=
-L.map("map")
-.setView(
-BRUNEI_CENTER,
-12
-);
-
-
-/*=========================================================
-OPENSTREETMAP
-=========================================================*/
-
-L.tileLayer(
-"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-{
-maxZoom:19,
-
-attribution:
-'&copy;OpenStreetMapcontributors'
-}
-).addTo(map);
-
-
-/*=========================================================
-MAPSIZEFIX
-=========================================================*/
-
-setTimeout(
-function(){
-
-map.invalidateSize();
-
-},
-500
-);
-
-
-/*=========================================================
-VARIABLES
-=========================================================*/
-
-letpickupMarker=null;
-
-letdestinationMarker=null;
-
-letpickupCoords=null;
-
-letdestinationCoords=null;
-
-letrouteLine=null;
-
-
-/*=========================================================
-PINICON
-=========================================================*/
-
-functionmakeIcon(label){
-
-returnL.divIcon({
-
-className:"",
-
-html:`
-
-<divstyle="
-display:flex;
-flex-direction:column;
-align-items:center;
-">
-
-<divstyle="
-background:#111;
-color:white;
-padding:4px7px;
-border-radius:7px;
-font-size:10px;
-font-weight:800;
-white-space:nowrap;
-box-shadow:02px6pxrgba(0,0,0,.3);
-">
-${label}
-</div>
-
-<divstyle="
-width:18px;
-height:18px;
-background:#111;
-border:3pxsolidwhite;
-border-radius:50%;
-margin-top:3px;
-box-shadow:02px6pxrgba(0,0,0,.3);
-"></div>
-
-</div>
-
-`,
-
-iconSize:[
-80,
-42
-],
-
-iconAnchor:[
-40,
-38
-]
-
-});
-
-}
-
-
-/*=========================================================
-SETPICKUP
-=========================================================*/
-
-functionsetPickup(
-lat,
-lon,
-name
-){
-
-
-pickupCoords=[
-lat,
-lon
-];
-
-
-if(pickupMarker){
-
-map.removeLayer(
-pickupMarker
-);
-
-}
-
-
-pickupMarker=
-L.marker(
-[lat,lon],
-{
-draggable:true,
-
-icon:
-makeIcon("PICKUP")
-}
-)
-.addTo(map);
-
-
-pickupMarker.on(
-"dragend",
-asyncfunction(){
-
-constpos=
-pickupMarker.getLatLng();
-
-
-pickupCoords=[
-pos.lat,
-pos.lng
-];
-
-
-document.getElementById(
-"pickup"
-).value=
-"Selectedlocation";
-
-
-try{
-
-constaddress=
-awaitreverseGeocode(
-pos.lat,
-pos.lng
-);
-
-document.getElementById(
-"pickup"
-).value=
-address;
-
-}catch{}
-
-}
-);
-
-
-document.getElementById(
-"pickup"
-).value=
-name||
-"Selectedlocation";
-
-
-map.setView(
-[lat,lon],
-15
-);
-
-}
-
-
-/*=========================================================
-SETDESTINATION
-=========================================================*/
-
-functionsetDestination(
-lat,
-lon,
-name
-){
-
-
-destinationCoords=[
-lat,
-lon
-];
-
-
-if(destinationMarker){
-
-map.removeLayer(
-destinationMarker
-);
-
-}
-
-
-destinationMarker=
-L.marker(
-[lat,lon],
-{
-draggable:true,
-
-icon:
-makeIcon("DESTINATION")
-}
-)
-.addTo(map);
-
-
-destinationMarker.on(
-"dragend",
-asyncfunction(){
-
-constpos=
-destinationMarker.getLatLng();
-
-
-destinationCoords=[
-pos.lat,
-pos.lng
-];
-
-
-document.getElementById(
-"destination"
-).value=
-"Selectedlocation";
-
-
-try{
-
-constaddress=
-awaitreverseGeocode(
-pos.lat,
-pos.lng
-);
-
-document.getElementById(
-"destination"
-).value=
-address;
-
-}catch{}
-
-}
-);
-
-
-document.getElementById(
-"destination"
-).value=
-name||
-"Selectedlocation";
-
-
-map.setView(
-[lat,lon],
-15
-);
-
-}
-
-
-/*=========================================================
-REVERSEGEOCODING
-=========================================================*/
-
-asyncfunctionreverseGeocode(
-lat,
-lon
-){
-
-
-consturl=
-"https://nominatim.openstreetmap.org/reverse?"+
-
-newURLSearchParams({
-
-format:
-"jsonv2",
-
-lat:
-lat,
-
-lon:
-lon,
-
-zoom:
-18,
-
-"accept-language":
-"en"
-
-});
-
-
-constresponse=
-awaitfetch(url);
-
-
-if(!response.ok){
-
-thrownewError(
-"Unabletoidentifylocation."
-);
-
-}
-
-
-constdata=
-awaitresponse.json();
-
-
-return(
-data.display_name||
-"Selectedlocation"
-);
-
-}
-
-
-/*=========================================================
-SEARCH
-=========================================================*/
-
-functionsetupSearch(
-inputId,
-suggestionId,
-type
-){
-
-
-constinput=
-document.getElementById(
-inputId
-);
-
-
-constbox=
-document.getElementById(
-suggestionId
-);
-
-
-lettimer=null;
-
-
-input.addEventListener(
-"input",
-function(){
-
-
-constquery=
-input.value.trim();
-
-
-clearTimeout(
-timer
-);
-
-
-if(
-query.length<3
-){
-
-box.style.display=
-"none";
-
-return;
-
-}
-
-
-timer=
-setTimeout(
-asyncfunction(){
-
-
-box.style.display=
-"block";
-
-
-box.innerHTML=
-`
-<divclass="suggestion">
-SearchingBrunei...
-</div>
-`;
-
-
-try{
-
-
-consturl=
-"https://nominatim.openstreetmap.org/search?"+
-
-newURLSearchParams({
-
-format:
-"jsonv2",
-
-q:
-query+
-",Brunei",
-
-countrycodes:
-"bn",
-
-limit:
-5,
-
-addressdetails:
-1,
-
-"accept-language":
-"en"
-
-});
-
-
-constresponse=
-awaitfetch(url);
-
-
-if(!response.ok){
-
-thrownewError(
-"Searchfailed."
-);
-
-}
-
-
-constresults=
-awaitresponse.json();
-
-
-box.innerHTML=
-"";
-
-
-if(
-results.length===0
-){
-
-box.innerHTML=
-`
-<divclass="suggestion">
-Nolocationfound
-</div>
-`;
-
-return;
-
-}
-
-
-results.forEach(
-function(result){
-
-
-constitem=
-document.createElement(
-"div"
-);
-
-
-item.className=
-"suggestion";
-
-
-item.textContent=
-result.display_name;
-
-
-item.onclick=
-function(){
-
-
-constlat=
-parseFloat(
-result.lat
-);
-
-
-constlon=
-parseFloat(
-result.lon
-);
-
-
-if(
-type===
-"pickup"
-){
-
-setPickup(
-lat,
-lon,
-result.display_name
-);
-
-}else{
-
-setDestination(
-lat,
-lon,
-result.display_name
-);
-
-}
-
-
-box.style.display=
-"none";
-
-};
-
-
-box.appendChild(
-item
-);
-
-}
-);
-
-
-}catch(error){
-
-
-box.innerHTML=
-`
-<divclass="suggestion">
-Searchunavailable.
-</div>
-`;
-
-}
-
-
-},
-1200
-);
-
-}
-);
-
-}
-
-
-/*=========================================================
-STARTSEARCH
-=========================================================*/
-
-setupSearch(
-"pickup",
-"pickupSuggestions",
-"pickup"
-);
-
-
-setupSearch(
-"destination",
-"destinationSuggestions",
-"destination"
-);
-
-
-/*=========================================================
-MYLOCATION
-=========================================================*/
-
-window.useMyLocation=
-function(type){
-
-
-if(
-!navigator.geolocation
-){
-
-showError(
-"Locationservicesarenotsupported."
-);
-
-return;
-
-}
-
-
-showStatus(
-"Gettingyourlocation..."
-);
-
-
-navigator.geolocation.getCurrentPosition(
-
-asyncfunction(position){
-
-
-constlat=
-position.coords.latitude;
-
-
-constlon=
-position.coords.longitude;
-
-
-letname=
-"MyLocation";
-
-
-try{
-
-name=
-awaitreverseGeocode(
-lat,
-lon
-);
-
-}catch{}
-
-
-if(
-type===
-"pickup"
-){
-
-setPickup(
-lat,
-lon,
-name
-);
-
-}else{
-
-setDestination(
-lat,
-lon,
-name
-);
-
-}
-
-
-hideStatus();
-
-},
-
-
-function(){
-
-
-hideStatus();
-
-
-showError(
-"Unabletogetyourlocation.Pleaseallowlocationaccess."
-);
-
-},
-
-
-{
-enableHighAccuracy:
-true,
-
-timeout:
-10000,
-
-maximumAge:
-30000
-
-}
-
-);
-
-};
-
-
-/*=========================================================
-MAPTAP
-=========================================================*/
-
-map.on(
-"click",
-asyncfunction(event){
-
-
-constlat=
-event.latlng.lat;
-
-
-constlon=
-event.latlng.lng;
 
 
 /*
-Firsttap:
-pickup
-
-Secondtap:
-destination
-
-Furthertaps:
-destinationmoves
+==========================================================
+SORT KAMPONGS
+==========================================================
 */
 
-
-if(!pickupCoords){
-
-
-setPickup(
-lat,
-lon,
-"Selectedlocation"
+kampongs.sort((a, b) =>
+  a.name.localeCompare(b.name)
 );
 
 
-try{
+/*
+==========================================================
+POPULATE DROPDOWNS
+==========================================================
+*/
 
-constaddress=
-awaitreverseGeocode(
-lat,
-lon
-);
+const pickupSelect =
+  document.getElementById("pickup");
 
+const destinationSelect =
+  document.getElementById("destination");
 
-document.getElementById(
-"pickup"
-).value=
-address;
 
-}catch{}
+kampongs.forEach(kampong => {
 
+  const pickupOption =
+    document.createElement("option");
 
-return;
+  pickupOption.value =
+    kampong.name;
 
-}
+  pickupOption.textContent =
+    kampong.name;
 
 
-setDestination(
-lat,
-lon,
-"Selectedlocation"
-);
+  const destinationOption =
+    document.createElement("option");
 
+  destinationOption.value =
+    kampong.name;
 
-try{
+  destinationOption.textContent =
+    kampong.name;
 
-constaddress=
-awaitreverseGeocode(
-lat,
-lon
-);
 
+  pickupSelect.appendChild(
+    pickupOption
+  );
 
-document.getElementById(
-"destination"
-).value=
-address;
+  destinationSelect.appendChild(
+    destinationOption
+  );
 
-}catch{}
-
-}
-);
-
-
-/*=========================================================
-ROUTE
-=========================================================*/
-
-window.getRoute=
-asyncfunction(){
-
-
-hideError();
-
-
-if(!pickupCoords){
-
-showError(
-"Selectapickuplocationfirst."
-);
-
-return;
-
-}
-
-
-if(!destinationCoords){
-
-showError(
-"Selectadestinationfirst."
-);
-
-return;
-
-}
-
-
-showStatus(
-"Calculatingdrivingroute..."
-);
-
-
-try{
-
-
-conststart=
-`${pickupCoords[1]},${pickupCoords[0]}`;
-
-
-constend=
-`${destinationCoords[1]},${destinationCoords[0]}`;
-
-
-constcoordinates=
-start+
-";"+
-end;
-
-
-consturl=
-"https://router.project-osrm.org/route/v1/driving/"+
-
-coordinates+
-
-"?overview=full"+
-
-"&geometries=geojson"+
-
-"&steps=false"+
-
-"&alternatives=false";
-
-
-constresponse=
-awaitfetch(url);
-
-
-if(!response.ok){
-
-thrownewError(
-"Routingserviceunavailable."
-);
-
-}
-
-
-constdata=
-awaitresponse.json();
-
-
-if(
-data.code!==
-"Ok"
-){
-
-thrownewError(
-"Nodrivingroutefound."
-);
-
-}
-
-
-constroute=
-data.routes[0];
-
-
-/*REMOVEOLDROUTE*/
-
-if(routeLine){
-
-map.removeLayer(
-routeLine
-);
-
-}
-
-
-/*DRAWROUTE*/
-
-routeLine=
-L.geoJSON(
-route.geometry,
-{
-
-style:{
-
-color:
-"#111",
-
-weight:
-6,
-
-opacity:
-1
-
-}
-
-}
-)
-.addTo(map);
-
-
-/*FITROUTE*/
-
-map.fitBounds(
-routeLine.getBounds(),
-{
-padding:
-[30,30]
-}
-);
-
-
-/*DISTANCE*/
-
-constdistanceKm=
-route.distance/
-1000;
-
-
-document.getElementById(
-"distance"
-).textContent=
-distanceKm.toFixed(1)+
-"km";
-
-
-/*TIME*/
-
-constminutes=
-route.duration/
-60;
-
-
-document.getElementById(
-"time"
-).textContent=
-formatTime(
-minutes
-);
-
-
-/*SHOW*/
-
-document.getElementById(
-"routeInfo"
-).style.display=
-"block";
-
-
-hideStatus();
-
-
-document.getElementById(
-"routeInfo"
-).scrollIntoView({
-behavior:
-"smooth"
 });
 
 
-}catch(error){
+/*
+==========================================================
+FIND KAMPONG
+==========================================================
+*/
 
+function getKampong(name) {
 
-hideStatus();
-
-
-showError(
-error.message||
-"Unabletocalculateroute."
-);
-
-}
-
-};
-
-
-/*=========================================================
-TIMEFORMAT
-=========================================================*/
-
-functionformatTime(
-minutes
-){
-
-
-minutes=
-Math.round(
-minutes
-);
-
-
-if(
-minutes<60
-){
-
-return(
-minutes+
-"min"
-);
+  return kampongs.find(
+    kampong => kampong.name === name
+  );
 
 }
 
 
-consthours=
-Math.floor(
-minutes/60
-);
+/*
+==========================================================
+CALCULATE COMMUNITY FARE
+==========================================================
+
+V1 RULE:
+
+0–5 km
+BND $5 minimum
+
+5–20 km
+BND $0.46 per km
+
+Above 20 km
+BND $0.80 per km
+
+Then round to nearest BND $0.50.
+==========================================================
+*/
+
+function calculateCommunityFare(distanceKm) {
+
+  let fare;
 
 
-constremaining=
-minutes%60;
+  if (distanceKm <= 5) {
+
+    fare = 5;
+
+  }
+
+  else if (distanceKm <= 20) {
+
+    fare = distanceKm * 0.46;
+
+  }
+
+  else {
+
+    fare = distanceKm * 0.80;
+
+  }
 
 
-if(
-remaining===0
-){
-
-return(
-hours+
-"hr"
-);
-
-}
+  // Minimum fare
+  fare = Math.max(
+    5,
+    fare
+  );
 
 
-return(
-hours+
-"hr"+
-remaining+
-"min"
-);
-
-}
+  // Round to nearest $0.50
+  fare =
+    Math.round(fare * 2) / 2;
 
 
-/*=========================================================
-STATUS
-=========================================================*/
-
-functionshowStatus(
-message
-){
-
-conststatus=
-document.getElementById(
-"status"
-);
-
-
-status.textContent=
-message;
-
-
-status.style.display=
-"block";
-
-}
-
-
-functionhideStatus(){
-
-document.getElementById(
-"status"
-).style.display=
-"none";
+  return fare;
 
 }
 
 
-/*=========================================================
-ERROR
-=========================================================*/
+/*
+==========================================================
+FORMAT DRIVE TIME
+==========================================================
+*/
 
-functionshowError(
-message
-){
+function formatDuration(seconds) {
 
-consterror=
-document.getElementById(
-"error"
-);
+  const minutes =
+    Math.round(seconds / 60);
 
 
-error.textContent=
-message;
+  if (minutes < 1) {
+
+    return "<1 min";
+
+  }
 
 
-error.style.display=
-"block";
+  if (minutes < 60) {
+
+    return minutes + " min";
+
+  }
+
+
+  const hours =
+    Math.floor(minutes / 60);
+
+  const remainingMinutes =
+    minutes % 60;
+
+
+  if (remainingMinutes === 0) {
+
+    return hours + " hr";
+
+  }
+
+
+  return (
+    hours +
+    " hr " +
+    remainingMinutes +
+    " min"
+  );
+
+}
+
+
+/*
+==========================================================
+GET ACTUAL ROAD DISTANCE FROM OSRM
+==========================================================
+
+NO MAP IS USED.
+
+overview=false means OSRM does not return route
+geometry. We only request the road distance and duration.
+
+OSRM coordinate format:
+
+longitude,latitude;longitude,latitude
+==========================================================
+*/
+
+async function getRoadRoute(
+  pickup,
+  destination
+) {
+
+  const coordinates =
+    `${pickup.lon},${pickup.lat};${destination.lon},${destination.lat}`;
+
+
+  const url =
+    `https://router.project-osrm.org/route/v1/driving/${coordinates}` +
+    `?overview=false` +
+    `&steps=false` +
+    `&alternatives=false`;
+
+
+  const response =
+    await fetch(url);
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Routing server returned an error."
+    );
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  if (
+    data.code !== "Ok" ||
+    !data.routes ||
+    !data.routes.length
+  ) {
+
+    throw new Error(
+      "No driving route could be found."
+    );
+
+  }
+
+
+  return data.routes[0];
 
 }
 
 
-functionhideError(){
+/*
+==========================================================
+MAIN CALCULATION
+==========================================================
+*/
 
-document.getElementById(
-"error"
-).style.display=
-"none";
+async function calculateFare() {
+
+  const pickupName =
+    pickupSelect.value;
+
+  const destinationName =
+    destinationSelect.value;
+
+
+  const error =
+    document.getElementById("error");
+
+  const result =
+    document.getElementById("result");
+
+  const loading =
+    document.getElementById("loading");
+
+  const button =
+    document.getElementById("calculateButton");
+
+
+  // Reset error
+  error.style.display = "none";
+
+
+  // Validate
+  if (
+    !pickupName ||
+    !destinationName
+  ) {
+
+    error.textContent =
+      "Please select both pickup and destination kampongs.";
+
+    error.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  if (
+    pickupName === destinationName
+  ) {
+
+    error.textContent =
+      "Pickup and destination cannot be the same kampong.";
+
+    error.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  const pickup =
+    getKampong(pickupName);
+
+  const destination =
+    getKampong(destinationName);
+
+
+  if (
+    !pickup ||
+    !destination
+  ) {
+
+    error.textContent =
+      "Unable to find the selected kampong.";
+
+    error.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  /*
+  ------------------------------------------
+  SHOW LOADING
+  ------------------------------------------
+  */
+
+  loading.style.display =
+    "block";
+
+  button.disabled =
+    true;
+
+  button.style.opacity =
+    "0.6";
+
+  result.style.display =
+    "none";
+
+
+  try {
+
+    /*
+    ----------------------------------------
+    GET ACTUAL ROAD ROUTE
+    ----------------------------------------
+    */
+
+    const route =
+      await getRoadRoute(
+        pickup,
+        destination
+      );
+
+
+    /*
+    ----------------------------------------
+    OSRM RETURNS DISTANCE IN METRES
+    ----------------------------------------
+    */
+
+    const distanceKm =
+      route.distance / 1000;
+
+
+    /*
+    ----------------------------------------
+    CALCULATE FARE
+    ----------------------------------------
+    */
+
+    const fare =
+      calculateCommunityFare(
+        distanceKm
+      );
+
+
+    /*
+    ----------------------------------------
+    DISPLAY RESULT
+    ----------------------------------------
+    */
+
+    document.getElementById(
+      "pickupName"
+    ).textContent =
+      pickup.name;
+
+
+    document.getElementById(
+      "destinationName"
+    ).textContent =
+      destination.name;
+
+
+    document.getElementById(
+      "distance"
+    ).textContent =
+      distanceKm.toFixed(1) + " km";
+
+
+    document.getElementById(
+      "duration"
+    ).textContent =
+      formatDuration(
+        route.duration
+      );
+
+
+    document.getElementById(
+      "fare"
+    ).textContent =
+      "BND $" +
+      fare.toFixed(2);
+
+
+    result.style.display =
+      "block";
+
+
+    /*
+    ----------------------------------------
+    SCROLL TO RESULT
+    ----------------------------------------
+    */
+
+    result.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }
+
+  catch (err) {
+
+    console.error(err);
+
+
+    error.textContent =
+      "Unable to calculate the road distance right now. Please try again.";
+
+    error.style.display =
+      "block";
+
+  }
+
+  finally {
+
+    loading.style.display =
+      "none";
+
+    button.disabled =
+      false;
+
+    button.style.opacity =
+      "1";
+
+  }
 
 }
 
 
-/*=========================================================
-CLOSESEARCHDROPDOWNS
-=========================================================*/
+/*
+==========================================================
+SWAP PICKUP / DESTINATION
+==========================================================
+*/
 
-document.addEventListener(
-"click",
-function(event){
+function swapLocations() {
 
+  const pickup =
+    pickupSelect.value;
 
-if(
-!event.target.closest(
-".search-box"
-)
-){
-
-
-document.getElementById(
-"pickupSuggestions"
-).style.display=
-"none";
+  const destination =
+    destinationSelect.value;
 
 
-document.getElementById(
-"destinationSuggestions"
-).style.display=
-"none";
+  pickupSelect.value =
+    destination;
+
+  destinationSelect.value =
+    pickup;
 
 }
-
-}
-);
 
 </script>
 
