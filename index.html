@@ -1,39 +1,51 @@
 <!DOCTYPEhtml>
 <htmllang="en">
 <head>
-<metacharset="UTF-8"/>
+<metacharset="UTF-8">
+
 <meta
 name="viewport"
-content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
-/>
+content="width=device-width,initial-scale=1.0,maximum-scale=1.0"
+>
 
 <title>CommunityFareChecker</title>
 
-<!--Leaflet-->
+<!--LEAFLET-->
 <link
 rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+crossorigin=""
+>
 
 <style>
+
 *{
 box-sizing:border-box;
 }
 
+html,
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"SegoeUI",sans-serif;
+padding:0;
 background:#f5f5f5;
 color:#111;
+font-family:
+-apple-system,
+BlinkMacSystemFont,
+"SegoeUI",
+sans-serif;
 }
+
+body{
+padding-bottom:30px;
+}
+
+/*HEADER*/
 
 header{
 background:#111;
-color:white;
-padding:18px18px16px;
-position:sticky;
-top:0;
-z-index:1000;
+color:#fff;
+padding:18px16px;
 }
 
 headerh1{
@@ -45,39 +57,49 @@ font-weight:800;
 headerp{
 margin:4px00;
 font-size:12px;
-opacity:0.7;
+opacity:.7;
 }
+
+/*CONTAINER*/
 
 .container{
-max-width:700px;
+width:100%;
+max-width:720px;
 margin:auto;
-padding:14px;
+padding:12px;
 }
 
+/*CARD*/
+
 .card{
-background:white;
+background:#fff;
 border-radius:16px;
 padding:14px;
 margin-bottom:12px;
-box-shadow:02px12pxrgba(0,0,0,0.06);
+box-shadow:02px12pxrgba(0,0,0,.06);
 }
 
-.field-label{
-font-size:12px;
-font-weight:700;
-margin-bottom:7px;
-color:#555;
+/*LABEL*/
+
+.label{
+font-size:11px;
+font-weight:800;
+color:#666;
+letter-spacing:.4px;
+margin-bottom:6px;
 }
+
+/*SEARCH*/
 
 .search-row{
 display:flex;
 gap:8px;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
-.search-rowinput{
+.search-wrapper{
 flex:1;
-min-width:0;
+position:relative;
 }
 
 input{
@@ -86,158 +108,193 @@ height:46px;
 border:1pxsolid#ddd;
 border-radius:11px;
 padding:013px;
-font-size:15px;
+font-size:14px;
+background:#fff;
 outline:none;
-background:white;
 }
 
 input:focus{
 border-color:#111;
 }
 
+.location-button{
+width:48px;
+min-width:48px;
+height:46px;
+padding:0;
+background:#eee;
+color:#111;
+font-size:19px;
+}
+
+/*BUTTONS*/
+
 button{
 border:0;
 border-radius:11px;
-min-height:44px;
-padding:014px;
+min-height:42px;
+padding:013px;
 font-weight:700;
+font-size:13px;
 cursor:pointer;
-font-size:14px;
+-webkit-tap-highlight-color:transparent;
 }
 
-.black-btn{
+.black{
 background:#111;
-color:white;
+color:#fff;
 }
 
-.light-btn{
+.grey{
 background:#eee;
 color:#111;
 }
 
-.location-btn{
+.swap{
 width:100%;
-margin-bottom:10px;
-background:#f0f0f0;
-}
-
-.swap-btn{
-width:100%;
-margin:4px012px;
 background:#111;
-color:white;
+color:#fff;
+margin-bottom:13px;
 }
 
-#map{
-height:430px;
-width:100%;
-border-radius:14px;
+/*SEARCHRESULTS*/
+
+.suggestions{
+position:absolute;
+left:0;
+right:0;
+top:50px;
+z-index:9999;
+background:white;
+border:1pxsolid#ddd;
+border-radius:11px;
 overflow:hidden;
+box-shadow:08px20pxrgba(0,0,0,.15);
 }
 
-.map-help{
-font-size:12px;
-color:#666;
-margin-top:8px;
-text-align:center;
+.suggestion{
+padding:12px;
+border-bottom:1pxsolid#eee;
+font-size:13px;
+line-height:1.35;
+cursor:pointer;
 }
+
+.suggestion:last-child{
+border-bottom:0;
+}
+
+.suggestion:active{
+background:#eee;
+}
+
+/*AREAS*/
 
 .area-grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:7px;
+}
+
+.area-button{
+min-height:38px;
+padding:5px;
+background:#f0f0f0;
+font-size:11px;
+}
+
+/*MAP*/
+
+#map{
+width:100%;
+height:430px;
+border-radius:13px;
+overflow:hidden;
+background:#ddd;
+}
+
+.map-info{
+text-align:center;
+font-size:11px;
+color:#777;
 margin-top:8px;
 }
 
-.area-btn{
-background:#f1f1f1;
-min-height:38px;
-padding:5px;
-font-size:12px;
-}
+/*CALCULATE*/
 
-.suggestions{
-position:relative;
-z-index:2000;
-}
-
-.suggestion-list{
-position:absolute;
-left:0;
-right:0;
-top:48px;
-background:white;
-border:1pxsolid#ddd;
-border-radius:11px;
-overflow:hidden;
-box-shadow:06px20pxrgba(0,0,0,0.12);
-z-index:3000;
-}
-
-.suggestion-item{
-padding:12px;
-border-bottom:1pxsolid#eee;
-font-size:14px;
-cursor:pointer;
-}
-
-.suggestion-item:last-child{
-border-bottom:0;
-}
-
-.suggestion-item:hover{
-background:#f5f5f5;
-}
-
-.calculate-btn{
+.calculate{
 width:100%;
+height:52px;
 background:#111;
 color:white;
-height:52px;
 font-size:16px;
-margin-top:12px;
 }
 
-.result-card{
+.loading{
+display:none;
+text-align:center;
+padding:12px00;
+font-size:12px;
+color:#666;
+}
+
+.error{
+display:none;
+margin-top:10px;
+padding:11px;
+border-radius:10px;
+background:#fff0f0;
+color:#a00000;
+font-size:12px;
+line-height:1.4;
+}
+
+/*RESULTS*/
+
+#results{
 display:none;
 }
 
-.route-summary{
+.summary{
 display:grid;
 grid-template-columns:1fr1fr;
 gap:8px;
-margin-bottom:12px;
+margin-bottom:10px;
 }
 
 .summary-box{
-background:#f5f5f5;
+background:#f3f3f3;
 border-radius:12px;
 padding:12px;
 text-align:center;
 }
 
-.summary-value{
-font-size:21px;
-font-weight:800;
+.summary-number{
+font-size:22px;
+font-weight:900;
 }
 
 .summary-label{
-font-size:11px;
+font-size:10px;
 color:#666;
-margin-top:2px;
+margin-top:3px;
 }
 
 .fare{
-border:1pxsolid#ddd;
 border-radius:13px;
 padding:13px;
 margin-top:8px;
+border:1pxsolid#ddd;
+}
+
+.fare.runner{
+border:2pxsolid#111;
 }
 
 .fare-title{
-font-size:13px;
-font-weight:700;
-color:#555;
+font-size:12px;
+font-weight:800;
+color:#666;
 }
 
 .fare-price{
@@ -247,329 +304,555 @@ margin-top:2px;
 }
 
 .fare-note{
-font-size:11px;
+font-size:10px;
 color:#777;
 margin-top:2px;
 }
 
-.dart{
-background:#f3f3f3;
-}
-
-.runner{
-border:2pxsolid#111;
-}
-
-.ride{
-border:1pxsolid#aaa;
-}
-
-.notice{
-font-size:11px;
+.disclaimer{
+font-size:10px;
 color:#777;
 line-height:1.5;
-margin-top:12px;
+margin-top:13px;
 }
 
-.loading{
-display:none;
-text-align:center;
-padding:12px;
-font-size:13px;
-color:#555;
-}
+/*MOBILE*/
 
-.error{
-display:none;
-background:#fff0f0;
-color:#a00000;
-padding:10px;
-border-radius:10px;
-font-size:13px;
-margin-top:10px;
-}
+@media(max-width:430px){
 
-.pin-label{
-background:#111;
-color:white;
-border-radius:8px;
-padding:4px7px;
-font-size:11px;
-font-weight:700;
-white-space:nowrap;
-border:0;
-}
-
-@media(max-width:420px){
 .area-grid{
 grid-template-columns:repeat(2,1fr);
 }
 
 #map{
-height:390px;
+height:380px;
 }
+
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
+
 <h1>CommunityFareChecker</h1>
-<p>Community-standardfarereferenceforBrunei</p>
+
+<p>
+Community-standardfarereferenceforBrunei
+</p>
+
 </header>
+
 
 <divclass="container">
 
-<!--LOCATIONS-->
+
+<!--LOCATIONCARD-->
+
 <divclass="card">
 
-<divclass="field-label">PICKUP</div>
+<divclass="label">
+PICKUP
+</div>
 
 <divclass="search-row">
-<divclass="suggestions"style="flex:1;">
+
+<divclass="search-wrapper">
+
 <input
 id="pickupInput"
 type="text"
 placeholder="Searchpickuplocation"
 autocomplete="off"
-/>
-<divid="pickupSuggestions"class="suggestion-list"></div>
+>
+
+<div
+id="pickupSuggestions"
+class="suggestions"
+style="display:none;"
+></div>
+
 </div>
 
 <button
-class="light-btn"
+class="location-button"
 onclick="useCurrentLocation('pickup')"
-title="Usecurrentlocation"
 >
 📍
 </button>
+
 </div>
 
-<divclass="field-label">DESTINATION</div>
+
+<divclass="label">
+DESTINATION
+</div>
 
 <divclass="search-row">
-<divclass="suggestions"style="flex:1;">
+
+<divclass="search-wrapper">
+
 <input
 id="destinationInput"
 type="text"
 placeholder="Searchdestination"
 autocomplete="off"
-/>
-<divid="destinationSuggestions"class="suggestion-list"></div>
+>
+
+<div
+id="destinationSuggestions"
+class="suggestions"
+style="display:none;"
+></div>
+
 </div>
 
 <button
-class="light-btn"
+class="location-button"
 onclick="useCurrentLocation('destination')"
-title="Usecurrentlocation"
 >
 📍
 </button>
+
 </div>
 
-<buttonclass="swap-btn"onclick="swapLocations()">
+
+<button
+class="swapblack"
+onclick="swapLocations()"
+>
 ⇅SwapPickup&Destination
 </button>
 
-<divclass="field-label">BRUNEIAREAQUICKSEARCH</div>
 
-<divid="areaGrid"class="area-grid"></div>
+<divclass="label">
+BRUNEIAREAQUICKSEARCH
+</div>
+
+<div
+id="areaGrid"
+class="area-grid"
+></div>
 
 </div>
 
-<!--MAP-->
+
+<!--MAPCARD-->
+
 <divclass="card">
 
 <divid="map"></div>
 
-<divclass="map-help">
-Dragthepickup/destinationpinstofine-tunetheexactlocation.
+<divclass="map-info">
+Tapthemaptoplaceapin.
+Dragpinstofine-tunethelocation.
 </div>
 
 </div>
 
-<!--CALCULATE-->
+
+<!--CALCULATECARD-->
+
 <divclass="card">
 
-<buttonclass="calculate-btn"onclick="calculateRoute()">
+<button
+class="calculate"
+onclick="calculateRoute()"
+>
 CalculateFare
 </button>
 
-<divid="loading"class="loading">
+<div
+id="loading"
+class="loading"
+>
 Calculatingdrivingroute...
 </div>
 
-<divid="error"class="error"></div>
+<div
+id="error"
+class="error"
+></div>
 
 </div>
 
-<!--RESULT-->
-<divid="resultCard"class="cardresult-card">
 
-<divclass="route-summary">
+<!--RESULTS-->
+
+<div
+id="results"
+class="card"
+>
+
+<divclass="summary">
 
 <divclass="summary-box">
-<divid="distanceValue"class="summary-value">-</div>
-<divclass="summary-label">DRIVINGDISTANCE</div>
+
+<div
+id="distance"
+class="summary-number"
+>
+-
 </div>
+
+<divclass="summary-label">
+DRIVINGDISTANCE
+</div>
+
+</div>
+
 
 <divclass="summary-box">
-<divid="durationValue"class="summary-value">-</div>
-<divclass="summary-label">ESTIMATEDTIME</div>
+
+<div
+id="duration"
+class="summary-number"
+>
+-
+</div>
+
+<divclass="summary-label">
+ESTIMATEDTIME
 </div>
 
 </div>
 
-<divclass="faredart">
-<divclass="fare-title">DARTReference</div>
-<divid="dartPrice"class="fare-price">$0.00</div>
+</div>
+
+
+<divclass="fare">
+
+<divclass="fare-title">
+DARTREFERENCE
+</div>
+
+<div
+id="dartFare"
+class="fare-price"
+>
+$0.00
+</div>
+
 <divclass="fare-note">
-Approximatereferencebasedonthecommunity'scurrentDARTtariffmodel.
+ApproximateDARTreference
 </div>
+
 </div>
+
 
 <divclass="farerunner">
-<divclass="fare-title">PersonalRunner</div>
-<divid="runnerPrice"class="fare-price">$0.00</div>
+
+<divclass="fare-title">
+PERSONALRUNNER
+</div>
+
+<div
+id="runnerFare"
+class="fare-price"
+>
+$0.00
+</div>
+
 <divclass="fare-note">
 25%belowDART·Minimum$5
 </div>
+
 </div>
 
-<divclass="fareride">
-<divclass="fare-title">PersonalRide</div>
-<divid="ridePrice"class="fare-price">$0.00</div>
+
+<divclass="fare">
+
+<divclass="fare-title">
+PERSONALRIDE
+</div>
+
+<div
+id="rideFare"
+class="fare-price"
+>
+$0.00
+</div>
+
 <divclass="fare-note">
 25%belowDART·Minimum$5
 </div>
+
 </div>
 
-<divclass="notice">
-Communitypricingisasuggestedstandardandisnotoperatedby
-DARToranyothercompany.
 
-ThisVersion1checkerprovidespricereferencesonly.
-Itdoesnotprovidebooking,drivermatching,paymentprocessing,
+<divclass="disclaimer">
+
+Communitypricingisasuggestedstandardandisnot
+operatedbyDARToranyothercompany.
+
+<br><br>
+
+Version1isapricecheckeronly.
+Nobooking,drivermatching,paymentprocessing,
 accountsorcommissioncollection.
+
+<br><br>
 
 Mapdata©OpenStreetMapcontributors.
 RoutingprovidedbyOSRM.
-</div>
 
 </div>
 
 </div>
 
-<!--Leaflet-->
-<scriptsrc="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</div>
+
+
+<!--LEAFLETJS-->
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+crossorigin=""
+></script>
+
 
 <script>
 
-/*=========================================================
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+
+/*=====================================================
 SETTINGS
-=========================================================*/
+=====================================================*/
 
 constSETTINGS={
+
 runnerMinimum:5.00,
+
 rideMinimum:5.00,
-communityReduction:0.25,
-roundUnit:0.50
+
+reduction:0.25,
+
+rounding:0.50
+
 };
 
 
-/*=========================================================
-BRUNEIMAPDEFAULT
-=========================================================*/
+/*=====================================================
+DEFAULTBRUNEILOCATION
+=====================================================*/
 
-constDEFAULT_CENTER=[4.9031,114.9398];
-
-
-/*=========================================================
-AREAQUICKSEARCH
-=========================================================*/
-
-constBRUNEI_AREAS=[
-"BandarSeriBegawan",
-"Gadong",
-"Kiulap",
-"Kiarong",
-"Menglait",
-"Beribi",
-"BatuBersurat",
-"Tungku",
-"Rimba",
-"Mata-Mata",
-"Jerudong",
-"Sengkurong",
-"Kilanas",
-"Bunut",
-"TanjongBunut",
-"Madang",
-"Mentiri",
-"Muara",
-"Berakas",
-"Lambak",
-"Salambigar",
-"Serusop",
-"Airport",
-"AnggerekDesa",
-"Katok",
-"Subok",
-"JalanKebangsaan",
-"JalanTutong",
-"Tutong",
-"Telisai",
-"KualaBelait",
-"Seria",
-"Lumut",
-"SungaiLiang",
-"Labi"
+constDEFAULT_CENTER=[
+4.9031,
+114.9398
 ];
 
 
-/*=========================================================
-MAP
-=========================================================*/
+/*=====================================================
+MAPINITIALIZATION
+=====================================================*/
 
-constmap=L.map("map").setView(DEFAULT_CENTER,12);
+constmap=L.map(
+"map",
+{
+zoomControl:true
+}
+).setView(
+DEFAULT_CENTER,
+12
+);
 
-L.tileLayer(
+
+/*=====================================================
+OPENSTREETMAPTILES
+=====================================================*/
+
+consttiles=L.tileLayer(
 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
 {
 maxZoom:19,
-attribution:'&copy;OpenStreetMapcontributors'
+
+attribution:
+'&copy;<ahref="https://www.openstreetmap.org/copyright"target="_blank">OpenStreetMap</a>contributors'
 }
-).addTo(map);
+);
 
 
-/*=========================================================
-MAPSTATE
-=========================================================*/
+tiles.addTo(map);
+
+
+/*=====================================================
+FORCEMAPSIZECALCULATION
+=====================================================*/
+
+setTimeout(
+function(){
+
+map.invalidateSize();
+
+},
+300
+);
+
+
+/*=====================================================
+VARIABLES
+=====================================================*/
 
 letpickupMarker=null;
+
 letdestinationMarker=null;
-letrouteLayer=null;
 
 letpickupCoords=null;
+
 letdestinationCoords=null;
 
+letrouteLayer=null;
 
-/*=========================================================
-CUSTOMPINICON
-=========================================================*/
 
-functioncreatePinIcon(label){
+/*=====================================================
+AREALIST
+=====================================================*/
+
+constareas=[
+
+"BandarSeriBegawan",
+
+"Gadong",
+
+"Kiulap",
+
+"Kiarong",
+
+"Menglait",
+
+"Beribi",
+
+"BatuBersurat",
+
+"Tungku",
+
+"Rimba",
+
+"Mata-Mata",
+
+"Jerudong",
+
+"Sengkurong",
+
+"Kilanas",
+
+"Bunut",
+
+"TanjongBunut",
+
+"Madang",
+
+"Mentiri",
+
+"Muara",
+
+"Berakas",
+
+"Lambak",
+
+"Salambigar",
+
+"Serusop",
+
+"BruneiInternationalAirport",
+
+"AnggerekDesa",
+
+"Katok",
+
+"Subok",
+
+"JalanKebangsaan",
+
+"JalanTutong",
+
+"Tutong",
+
+"Telisai",
+
+"KualaBelait",
+
+"Seria",
+
+"Lumut",
+
+"SungaiLiang",
+
+"Labi"
+
+];
+
+
+constareaGrid=
+document.getElementById(
+"areaGrid"
+);
+
+
+areas.forEach(
+function(area){
+
+constbutton=
+document.createElement(
+"button"
+);
+
+button.className=
+"area-button";
+
+button.textContent=
+area;
+
+button.onclick=
+function(){
+
+searchArea(area);
+
+};
+
+areaGrid.appendChild(
+button
+);
+
+}
+);
+
+
+/*=====================================================
+PINICON
+=====================================================*/
+
+functionpinIcon(label){
 
 returnL.divIcon({
+
 className:"",
+
 html:`
 <divstyle="
 display:flex;
 flex-direction:column;
 align-items:center;
+pointer-events:none;
 ">
-<divclass="pin-label">${label}</div>
+
+<divstyle="
+background:#111;
+color:white;
+padding:4px7px;
+border-radius:7px;
+font-size:10px;
+font-weight:800;
+white-space:nowrap;
+box-shadow:02px5pxrgba(0,0,0,.25);
+">
+${label}
+</div>
 
 <divstyle="
 width:18px;
@@ -577,158 +860,492 @@ height:18px;
 background:#111;
 border:3pxsolidwhite;
 border-radius:50%;
-box-shadow:02px7pxrgba(0,0,0,.35);
-margin-top:4px;
+margin-top:3px;
+box-shadow:02px5pxrgba(0,0,0,.35);
 "></div>
+
 </div>
 `,
-iconSize:[80,45],
-iconAnchor:[40,35]
+
+iconSize:[
+80,
+42
+],
+
+iconAnchor:[
+40,
+38
+]
+
 });
 
 }
 
 
-/*=========================================================
-REVERSEGEOCODING
-=========================================================*/
+/*=====================================================
+SETPICKUP
+=====================================================*/
 
-asyncfunctionreverseGeocode(lat,lon){
+functionsetPickup(
+lat,
+lon,
+name
+){
 
-consturl=
-"https://nominatim.openstreetmap.org/reverse?"+
-newURLSearchParams({
-format:"jsonv2",
-lat:lat,
-lon:lon,
-zoom:18,
-addressdetails:1,
-"accept-language":"en"
-});
+pickupCoords=[
+lat,
+lon
+];
 
-constresponse=awaitfetch(url,{
-headers:{
-"Accept":"application/json"
-}
-});
 
-if(!response.ok){
-thrownewError("Reversegeocodingfailed.");
-}
+if(pickupMarker){
 
-constdata=awaitresponse.json();
+map.removeLayer(
+pickupMarker
+);
 
-returndata.display_name||`${lat.toFixed(5)},${lon.toFixed(5)}`;
 }
 
 
-/*=========================================================
-SEARCH
-=========================================================*/
+pickupMarker=
+L.marker(
+[lat,lon],
+{
+draggable:true,
 
-letsearchTimer=null;
-
-functionsetupSearch(inputId,suggestionsId,type){
-
-constinput=document.getElementById(inputId);
-constsuggestions=document.getElementById(suggestionsId);
-
-input.addEventListener("input",function(){
-
-constquery=input.value.trim();
-
-clearTimeout(searchTimer);
-
-if(query.length<3){
-suggestions.innerHTML="";
-return;
+icon:
+pinIcon("PICKUP")
 }
+).addTo(map);
 
-/*
-NominatimdoesNOTpermitautocomplete.
 
-Thereforewedeliberatelywaituntiltheuser
-hasstoppedtypingandonlyperformanormalsearch.
-*/
+pickupMarker.on(
+"dragend",
+asyncfunction(){
 
-searchTimer=setTimeout(async()=>{
+constpos=
+pickupMarker.getLatLng();
+
+
+pickupCoords=[
+pos.lat,
+pos.lng
+];
+
+
+document.getElementById(
+"pickupInput"
+).value=
+"Selectedlocation";
+
 
 try{
 
-suggestions.innerHTML=
-`<divclass="suggestion-item">Searching...</div>`;
+constaddress=
+awaitreverseGeocode(
+pos.lat,
+pos.lng
+);
 
-consturl=
-"https://nominatim.openstreetmap.org/search?"+
-newURLSearchParams({
-format:"jsonv2",
-q:query+",Brunei",
-countrycodes:"bn",
-limit:5,
-addressdetails:1,
-"accept-language":"en"
-});
+document.getElementById(
+"pickupInput"
+).value=
+address;
 
-constresponse=awaitfetch(url,{
-headers:{
-"Accept":"application/json"
+}catch{}
+
 }
+);
+
+
+document.getElementById(
+"pickupInput"
+).value=
+name||
+"Selectedlocation";
+
+
+map.setView(
+[lat,lon],
+15
+);
+
+}
+
+
+/*=====================================================
+SETDESTINATION
+=====================================================*/
+
+functionsetDestination(
+lat,
+lon,
+name
+){
+
+destinationCoords=[
+lat,
+lon
+];
+
+
+if(destinationMarker){
+
+map.removeLayer(
+destinationMarker
+);
+
+}
+
+
+destinationMarker=
+L.marker(
+[lat,lon],
+{
+draggable:true,
+
+icon:
+pinIcon("DESTINATION")
+}
+).addTo(map);
+
+
+destinationMarker.on(
+"dragend",
+asyncfunction(){
+
+constpos=
+destinationMarker.getLatLng();
+
+
+destinationCoords=[
+pos.lat,
+pos.lng
+];
+
+
+document.getElementById(
+"destinationInput"
+).value=
+"Selectedlocation";
+
+
+try{
+
+constaddress=
+awaitreverseGeocode(
+pos.lat,
+pos.lng
+);
+
+document.getElementById(
+"destinationInput"
+).value=
+address;
+
+}catch{}
+
+}
+);
+
+
+document.getElementById(
+"destinationInput"
+).value=
+name||
+"Selectedlocation";
+
+
+map.setView(
+[lat,lon],
+15
+);
+
+}
+
+
+/*=====================================================
+REVERSEGEOCODING
+=====================================================*/
+
+asyncfunctionreverseGeocode(
+lat,
+lon
+){
+
+constparams=
+newURLSearchParams({
+
+format:"jsonv2",
+
+lat:lat,
+
+lon:lon,
+
+zoom:18,
+
+addressdetails:1,
+
+"accept-language":"en"
+
 });
+
+
+constresponse=
+awaitfetch(
+"https://nominatim.openstreetmap.org/reverse?"+
+params.toString(),
+{
+headers:{
+"Accept":
+"application/json"
+}
+}
+);
+
 
 if(!response.ok){
-thrownewError("Searchfailed.");
+
+thrownewError(
+"Reversegeocodingfailed."
+);
+
 }
 
-constresults=awaitresponse.json();
 
-suggestions.innerHTML="";
+constdata=
+awaitresponse.json();
 
-if(!results.length){
+
+return(
+data.display_name||
+"Selectedlocation"
+);
+
+}
+
+
+/*=====================================================
+SEARCHFUNCTION
+=====================================================*/
+
+letsearchTimeout=null;
+
+
+functionsetupSearch(
+inputId,
+suggestionsId,
+type
+){
+
+constinput=
+document.getElementById(
+inputId
+);
+
+constsuggestions=
+document.getElementById(
+suggestionsId
+);
+
+
+input.addEventListener(
+"input",
+function(){
+
+constquery=
+input.value.trim();
+
+
+clearTimeout(
+searchTimeout
+);
+
+
+if(
+query.length<3
+){
+
+suggestions.style.display=
+"none";
 
 suggestions.innerHTML=
-`<divclass="suggestion-item">Nolocationfound</div>`;
+"";
 
 return;
+
 }
 
-results.forEach(result=>{
+
+/*
+Deliberatedelay.
+
+Nominatimisnotintendedfor
+instantclient-sideautocomplete.
+*/
+
+searchTimeout=
+setTimeout(
+asyncfunction(){
+
+suggestions.style.display=
+"block";
+
+suggestions.innerHTML=
+`<divclass="suggestion">
+Searching...
+</div>`;
+
+
+try{
+
+constparams=
+newURLSearchParams({
+
+format:"jsonv2",
+
+q:
+query+
+",Brunei",
+
+countrycodes:"bn",
+
+limit:5,
+
+addressdetails:1,
+
+"accept-language":"en"
+
+});
+
+
+constresponse=
+awaitfetch(
+"https://nominatim.openstreetmap.org/search?"+
+params.toString(),
+{
+headers:{
+"Accept":
+"application/json"
+}
+}
+);
+
+
+if(!response.ok){
+
+thrownewError(
+"Searchfailed."
+);
+
+}
+
+
+constresults=
+awaitresponse.json();
+
+
+suggestions.innerHTML=
+"";
+
+
+if(
+!results.length
+){
+
+suggestions.innerHTML=
+`<divclass="suggestion">
+Nolocationfound
+</div>`;
+
+return;
+
+}
+
+
+results.forEach(
+function(result){
 
 constitem=
-document.createElement("div");
+document.createElement(
+"div"
+);
 
-item.className="suggestion-item";
 
-item.textContent=result.display_name;
+item.className=
+"suggestion";
 
-item.onclick=()=>{
 
-setLocation(
-type,
-parseFloat(result.lat),
-parseFloat(result.lon),
+item.textContent=
+result.display_name;
+
+
+item.onclick=
+function(){
+
+constlat=
+parseFloat(
+result.lat
+);
+
+constlon=
+parseFloat(
+result.lon
+);
+
+
+if(
+type===
+"pickup"
+){
+
+setPickup(
+lat,
+lon,
 result.display_name
 );
 
-suggestions.innerHTML="";
-input.value=result.display_name;
+}else{
+
+setDestination(
+lat,
+lon,
+result.display_name
+);
+
+}
+
+
+suggestions.style.display=
+"none";
+
 };
 
-suggestions.appendChild(item);
 
-});
+suggestions.appendChild(
+item
+);
+
+}
+);
+
 
 }catch(error){
 
 suggestions.innerHTML=
-`<divclass="suggestion-item">
-Searchunavailable.Trydroppingapin.
+`<divclass="suggestion">
+Searchunavailable.
+Trytappingthemapinstead.
 </div>`;
 
 }
 
-},1200);
+},
+1200
+);
 
-});
+}
+);
 
 }
 
@@ -739,6 +1356,7 @@ setupSearch(
 "pickup"
 );
 
+
 setupSearch(
 "destinationInput",
 "destinationSuggestions",
@@ -746,127 +1364,105 @@ setupSearch(
 );
 
 
-/*=========================================================
-SETLOCATION
-=========================================================*/
+/*=====================================================
+MAPCLICK
+=====================================================*/
 
-functionsetLocation(type,lat,lon,name){
+map.on(
+"click",
+asyncfunction(event){
 
-constcoords=[lat,lon];
+constlat=
+event.latlng.lat;
 
-if(type==="pickup"){
+constlon=
+event.latlng.lng;
 
-pickupCoords=coords;
 
-if(pickupMarker){
-map.removeLayer(pickupMarker);
-}
+/*
+Firsttap:
+Pickup
 
-pickupMarker=L.marker(
-coords,
-{
-draggable:true,
-icon:createPinIcon("PICKUP")
-}
-).addTo(map);
+Secondtap:
+Destination
 
-pickupMarker.on("dragend",asyncfunction(e){
+Afterbothexist:
+Replacedestination
+*/
 
-constpos=e.target.getLatLng();
+if(!pickupCoords){
 
-pickupCoords=[
-pos.lat,
-pos.lng
-];
+setPickup(
+lat,
+lon,
+"Selectedlocation"
+);
 
 try{
 
 constaddress=
 awaitreverseGeocode(
-pos.lat,
-pos.lng
+lat,
+lon
 );
 
 document.getElementById(
 "pickupInput"
-).value=address;
+).value=
+address;
 
 }catch{}
 
-});
-
-document.getElementById(
-"pickupInput"
-).value=name||`${lat},${lon}`;
+return;
 
 }
 
 
-if(type==="destination"){
+setDestination(
+lat,
+lon,
+"Selectedlocation"
+);
 
-destinationCoords=coords;
-
-if(destinationMarker){
-map.removeLayer(destinationMarker);
-}
-
-destinationMarker=L.marker(
-coords,
-{
-draggable:true,
-icon:createPinIcon("DESTINATION")
-}
-).addTo(map);
-
-destinationMarker.on("dragend",asyncfunction(e){
-
-constpos=e.target.getLatLng();
-
-destinationCoords=[
-pos.lat,
-pos.lng
-];
 
 try{
 
 constaddress=
 awaitreverseGeocode(
-pos.lat,
-pos.lng
+lat,
+lon
 );
 
 document.getElementById(
 "destinationInput"
-).value=address;
+).value=
+address;
 
 }catch{}
 
-});
-
-document.getElementById(
-"destinationInput"
-).value=name||`${lat},${lon}`;
-
 }
-
-map.setView(coords,15);
-}
+);
 
 
-/*=========================================================
+/*=====================================================
 CURRENTLOCATION
-=========================================================*/
+=====================================================*/
 
-functionuseCurrentLocation(type){
+window.useCurrentLocation=
+function(type){
 
-if(!navigator.geolocation){
+if(
+!navigator.geolocation
+){
 
 showError(
-"Yourbrowserdoesnotsupportlocationservices."
+"Locationservicesarenotsupported."
 );
 
 return;
+
 }
+
 
 navigator.geolocation.getCurrentPosition(
 
@@ -878,25 +1474,39 @@ position.coords.latitude;
 constlon=
 position.coords.longitude;
 
+
+letaddress=
+"Currentlocation";
+
+
 try{
 
-constaddress=
-awaitreverseGeocode(lat,lon);
+address=
+awaitreverseGeocode(
+lat,
+lon
+);
 
-setLocation(
-type,
+}catch{}
+
+
+if(
+type===
+"pickup"
+){
+
+setPickup(
 lat,
 lon,
 address
 );
 
-}catch{
+}else{
 
-setLocation(
-type,
+setDestination(
 lat,
 lon,
-`${lat.toFixed(5)},${lon.toFixed(5)}`
+address
 );
 
 }
@@ -906,182 +1516,84 @@ lon,
 function(){
 
 showError(
-"Unabletogetyourcurrentlocation.Pleaseallowlocationaccess."
+"Couldnotgetyourlocation.Pleaseallowlocationaccessinyourbrowser."
 );
 
 },
 
 {
-enableHighAccuracy:true,
-timeout:10000
+enableHighAccuracy:
+true,
+
+timeout:
+10000,
+
+maximumAge:
+30000
 }
 
 );
-
-}
-
-
-/*=========================================================
-MAPCLICK
-=========================================================*/
-
-letnextPinType="pickup";
-
-map.on("click",asyncfunction(e){
-
-/*
-Ifneitherpinexists,firstclick=pickup.
-Ifpickupexistsbutdestinationdoesn't,click=destination.
-Otherwiseclickingthemapreplacesdestination.
-*/
-
-if(!pickupCoords){
-nextPinType="pickup";
-}elseif(!destinationCoords){
-nextPinType="destination";
-}else{
-nextPinType="destination";
-}
-
-try{
-
-constaddress=
-awaitreverseGeocode(
-e.latlng.lat,
-e.latlng.lng
-);
-
-setLocation(
-nextPinType,
-e.latlng.lat,
-e.latlng.lng,
-address
-);
-
-}catch{
-
-setLocation(
-nextPinType,
-e.latlng.lat,
-e.latlng.lng,
-`${e.latlng.lat.toFixed(5)},${e.latlng.lng.toFixed(5)}`
-);
-
-}
-
-});
-
-
-/*=========================================================
-SWAP
-=========================================================*/
-
-functionswapLocations(){
-
-if(!pickupCoords||!destinationCoords){
-return;
-}
-
-constoldPickup=
-[...pickupCoords];
-
-constoldDestination=
-[...destinationCoords];
-
-constpickupName=
-document.getElementById(
-"pickupInput"
-).value;
-
-constdestinationName=
-document.getElementById(
-"destinationInput"
-).value;
-
-setLocation(
-"pickup",
-oldDestination[0],
-oldDestination[1],
-destinationName
-);
-
-setLocation(
-"destination",
-oldPickup[0],
-oldPickup[1],
-pickupName
-);
-
-}
-
-
-/*=========================================================
-AREABUTTONS
-=========================================================*/
-
-constareaGrid=
-document.getElementById("areaGrid");
-
-BRUNEI_AREAS.forEach(area=>{
-
-constbutton=
-document.createElement("button");
-
-button.className=
-"area-btn";
-
-button.textContent=
-area;
-
-button.onclick=()=>{
-
-document.getElementById(
-"pickupInput"
-).value=area;
-
-searchArea(area);
 
 };
 
-areaGrid.appendChild(button);
 
-});
+/*=====================================================
+AREASEARCH
+=====================================================*/
 
+window.searchArea=
+asyncfunction(area){
 
-asyncfunctionsearchArea(area){
+hideError();
+
 
 try{
 
-consturl=
-"https://nominatim.openstreetmap.org/search?"+
+constparams=
 newURLSearchParams({
+
 format:"jsonv2",
-q:area+",Brunei",
+
+q:
+area+
+",Brunei",
+
 countrycodes:"bn",
+
 limit:1,
+
 addressdetails:1
+
 });
 
+
 constresponse=
-awaitfetch(url);
+awaitfetch(
+"https://nominatim.openstreetmap.org/search?"+
+params.toString()
+);
+
 
 constresults=
 awaitresponse.json();
 
-if(!results.length){
 
-showError(
-"Areacouldnotbefound."
+if(
+!results.length
+){
+
+thrownewError(
+"Areanotfound."
 );
 
-return;
 }
+
 
 constresult=
 results[0];
 
-setLocation(
-"pickup",
+
+setPickup(
 parseFloat(result.lat),
 parseFloat(result.lon),
 result.display_name
@@ -1090,21 +1602,75 @@ result.display_name
 }catch{
 
 showError(
-"Areasearchfailed."
+"Couldnotfindthisarea."
 );
 
 }
 
+};
+
+
+/*=====================================================
+SWAP
+=====================================================*/
+
+window.swapLocations=
+function(){
+
+if(
+!pickupCoords||
+!destinationCoords
+){
+
+return;
+
 }
 
 
-/*=========================================================
-ROUTING—OSRM
-=========================================================*/
+constoldPickup=
+[...pickupCoords];
 
-asyncfunctioncalculateRoute(){
+constoldDestination=
+[...destinationCoords];
+
+
+constpickupName=
+document.getElementById(
+"pickupInput"
+).value;
+
+
+constdestinationName=
+document.getElementById(
+"destinationInput"
+).value;
+
+
+setPickup(
+oldDestination[0],
+oldDestination[1],
+destinationName
+);
+
+
+setDestination(
+oldPickup[0],
+oldPickup[1],
+pickupName
+);
+
+};
+
+
+/*=====================================================
+ROUTING
+=====================================================*/
+
+window.calculateRoute=
+asyncfunction(){
 
 hideError();
+
 
 if(!pickupCoords){
 
@@ -1113,7 +1679,9 @@ showError(
 );
 
 return;
+
 }
+
 
 if(!destinationCoords){
 
@@ -1122,6 +1690,7 @@ showError(
 );
 
 return;
+
 }
 
 
@@ -1130,32 +1699,27 @@ setLoading(true);
 
 try{
 
-constpickupLon=
+conststartLon=
 pickupCoords[1];
 
-constpickupLat=
+conststartLat=
 pickupCoords[0];
 
-constdestinationLon=
+constendLon=
 destinationCoords[1];
 
-constdestinationLat=
+constendLat=
 destinationCoords[0];
 
 
 constcoordinates=
-`${pickupLon},${pickupLat};`+
-`${destinationLon},${destinationLat}`;
+`${startLon},${startLat};${endLon},${endLat}`;
 
 
 consturl=
-`https://router.project-osrm.org/route/v1/driving/${coordinates}?`+
-newURLSearchParams({
-alternatives:"false",
-overview:"full",
-geometries:"geojson",
-steps:"false"
-});
+"https://router.project-osrm.org/route/v1/driving/"+
+coordinates+
+"?overview=full&geometries=geojson&steps=false&alternatives=false";
 
 
 constresponse=
@@ -1163,9 +1727,11 @@ awaitfetch(url);
 
 
 if(!response.ok){
+
 thrownewError(
-"Routingserverunavailable."
+"Routingserviceisunavailable."
 );
+
 }
 
 
@@ -1180,7 +1746,7 @@ data.code!=="Ok"||
 ){
 
 thrownewError(
-"Nodrivingroutefound."
+"Nodrivingroutewasfoundbetweentheselocations."
 );
 
 }
@@ -1193,11 +1759,12 @@ data.routes[0];
 constdistanceKm=
 route.distance/1000;
 
+
 constdurationMinutes=
 route.duration/60;
 
 
-/*DRAWROUTE*/
+/*REMOVEOLDROUTE*/
 
 if(routeLayer){
 
@@ -1208,128 +1775,122 @@ routeLayer
 }
 
 
+/*ADDNEWROUTE*/
+
 routeLayer=
 L.geoJSON(
+route.geometry,
 {
-type:"Feature",
-geometry:route.geometry,
-properties:{}
-},
-{
-style:{
-color:"#111",
-weight:7,
-opacity:0.25
-}
-}
-).addTo(map);
 
-
-constrouteInner=
-L.geoJSON(
-{
-type:"Feature",
-geometry:route.geometry,
-properties:{}
-},
-{
 style:{
+
 color:"#111",
-weight:4,
+
+weight:5,
+
 opacity:1
+
 }
+
 }
 ).addTo(map);
 
 
-/*
-Keeptheinnerrouteattachedtothesame
-routeLayerreferencesowecanremoveboth.
-*/
+/*FITMAP*/
 
-routeLayer=L.layerGroup([
-routeLayer,
-routeInner
-]);
+constbounds=
+routeLayer.getBounds();
 
+
+if(
+bounds.isValid()
+){
 
 map.fitBounds(
-routeLayer.getBounds(),
+bounds,
 {
-padding:[35,35]
+padding:[
+35,
+35
+]
 }
 );
 
+}
 
-/*DISPLAYDISTANCE*/
+
+/*DISTANCE*/
 
 document.getElementById(
-"distanceValue"
+"distance"
 ).textContent=
-distanceKm.toFixed(1)+"km";
+distanceKm.toFixed(1)+
+"km";
 
 
-/*DISPLAYTIME*/
+/*TIME*/
 
 document.getElementById(
-"durationValue"
+"duration"
 ).textContent=
 formatDuration(
 durationMinutes
 );
 
 
-/*CALCULATEFARES*/
+/*FARES*/
 
-constdartFare=
+constdart=
 calculateDartFare(
 distanceKm
 );
 
 
-construnnerFare=
+construnner=
 calculateCommunityFare(
-dartFare,
+dart,
 SETTINGS.runnerMinimum
 );
 
 
-constrideFare=
+constride=
 calculateCommunityFare(
-dartFare,
+dart,
 SETTINGS.rideMinimum
 );
 
 
 document.getElementById(
-"dartPrice"
+"dartFare"
 ).textContent=
-formatMoney(dartFare);
+formatMoney(dart);
 
 
 document.getElementById(
-"runnerPrice"
+"runnerFare"
 ).textContent=
-formatMoney(runnerFare);
+formatMoney(runner);
 
 
 document.getElementById(
-"ridePrice"
+"rideFare"
 ).textContent=
-formatMoney(rideFare);
+formatMoney(ride);
 
+
+/*SHOWRESULTS*/
 
 document.getElementById(
-"resultCard"
+"results"
 ).style.display=
 "block";
 
 
 document.getElementById(
-"resultCard"
+"results"
 ).scrollIntoView({
-behavior:"smooth",
-block:"start"
+behavior:
+"smooth"
 });
 
 
@@ -1337,7 +1898,7 @@ block:"start"
 
 showError(
 error.message||
-"Unabletocalculateroute."
+"Couldnotcalculateroute."
 );
 
 }
@@ -1345,41 +1906,57 @@ error.message||
 
 setLoading(false);
 
-}
+};
 
 
-/*=========================================================
-DARTREFERENCEFARE
-=========================================================*/
+/*=====================================================
+DARTREFERENCE
+=====================================================*/
 
-functioncalculateDartFare(distanceKm){
+functioncalculateDartFare(
+distanceKm
+){
 
 letfare;
 
 
 /*
-CurrentV1communityapproximation:
+V1approximation:
 
-Under5km=$5
-5–20km=$0.46/km
-Over20km=$0.80/km
+Under5km:
+$5
 
-Thisshouldremainlabelledasanapproximation
-untiltheofficialDARTtariffmodelisfully
-convertedintoanexactcalculator.
+5–20km:
+$0.46/km
+
+Over20km:
+$0.80/km
 */
 
-if(distanceKm<5){
+
+if(
+distanceKm<5
+){
 
 fare=5.00;
 
-}elseif(distanceKm<=20){
+}
 
-fare=distanceKm*0.46;
+elseif(
+distanceKm<=20
+){
 
-}else{
+fare=
+distanceKm*
+0.46;
 
-fare=distanceKm*0.80;
+}
+
+else{
+
+fare=
+distanceKm*
+0.80;
 
 }
 
@@ -1391,9 +1968,9 @@ fare
 }
 
 
-/*=========================================================
-COMMUNITYFARE
-=========================================================*/
+/*=====================================================
+COMMUNITYPRICE
+=====================================================*/
 
 functioncalculateCommunityFare(
 dartFare,
@@ -1402,7 +1979,10 @@ minimum
 
 letprice=
 dartFare*
-(1-SETTINGS.communityReduction);
+(
+1-
+SETTINGS.reduction
+);
 
 
 price=
@@ -1419,98 +1999,135 @@ price
 }
 
 
-/*=========================================================
-ROUNDING
-=========================================================*/
+/*=====================================================
+ROUNDTO$0.50
+=====================================================*/
 
-functionroundToHalf(value){
+functionroundToHalf(
+value
+){
 
-returnMath.round(
-value/
-SETTINGS.roundUnit
+return(
+Math.round(
+value/0.50
 )*
-SETTINGS.roundUnit;
+0.50
+);
 
 }
 
 
-/*=========================================================
+/*=====================================================
 MONEY
-=========================================================*/
+=====================================================*/
 
-functionformatMoney(value){
+functionformatMoney(
+value
+){
 
-return"$"+
-value.toFixed(2);
+return(
+"$"+
+value.toFixed(2)
+);
 
 }
 
 
-/*=========================================================
-DURATION
-=========================================================*/
+/*=====================================================
+TIME
+=====================================================*/
 
-functionformatDuration(minutes){
+functionformatDuration(
+minutes
+){
 
 minutes=
-Math.round(minutes);
+Math.round(
+minutes
+);
 
 
-if(minutes<60){
+if(
+minutes<60
+){
 
-return`${minutes}min`;
+return(
+minutes+
+"min"
+);
 
 }
 
 
 consthours=
-Math.floor(minutes/60);
+Math.floor(
+minutes/60
+);
 
-constmins=
+
+constremaining=
 minutes%60;
 
 
-if(mins===0){
+if(
+remaining===0
+){
 
-return`${hours}hr`;
+return(
+hours+
+"hr"
+);
 
 }
 
 
-return`${hours}hr${mins}min`;
+return(
+hours+
+"hr"+
+remaining+
+"min"
+);
 
 }
 
 
-/*=========================================================
+/*=====================================================
 LOADING
-=========================================================*/
+=====================================================*/
 
-functionsetLoading(show){
+functionsetLoading(
+visible
+){
 
 document.getElementById(
 "loading"
 ).style.display=
-show?"block":"none";
+visible
+?"block"
+:"none";
 
 }
 
 
-/*=========================================================
-ERRORS
-=========================================================*/
+/*=====================================================
+ERROR
+=====================================================*/
 
-functionshowError(message){
+functionshowError(
+message
+){
 
-consterror=
+constbox=
 document.getElementById(
 "error"
 );
 
-error.textContent=
+
+box.textContent=
 message;
 
-error.style.display=
+
+box.style.display=
 "block";
 
 }
@@ -1526,9 +2143,9 @@ document.getElementById(
 }
 
 
-/*=========================================================
-CLOSESEARCHDROPDOWNSWHENCLICKINGOUTSIDE
-=========================================================*/
+/*=====================================================
+CLOSESEARCHRESULTS
+=====================================================*/
 
 document.addEventListener(
 "click",
@@ -1536,21 +2153,29 @@ function(event){
 
 if(
 !event.target.closest(
-".suggestions"
+".search-wrapper"
 )
 ){
 
 document.getElementById(
 "pickupSuggestions"
-).innerHTML="";
+).style.display=
+"none";
+
 
 document.getElementById(
 "destinationSuggestions"
-).innerHTML="";
+).style.display=
+"none";
 
 }
 
 }
+);
+
+
+}
+
 );
 
 </script>
