@@ -1,1359 +1,1171 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPEhtml>
+<htmllang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-<meta name="theme-color" content="#111111">
-
-<title>Community Fare Checker</title>
-
+<metacharset="UTF-8"/>
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+/>
+<title>CommunityFareChecker</title>
+<!--Leaflet-->
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 <style>
-
-* {
-    box-sizing: border-box;
+*{
+box-sizing:border-box;
 }
-
-body {
-    margin: 0;
-    background: #f5f5f7;
-    color: #111;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"SegoeUI",sans-serif;
+background:#f5f5f5;
+color:#111;
 }
-
-.app {
-    width: 100%;
-    max-width: 720px;
-    margin: auto;
-    padding: 18px 14px 40px;
+header{
+background:#111;
+color:white;
+padding:18px18px16px;
+position:sticky;
+top:0;
+z-index:1000;
 }
-
-/* HEADER */
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
+headerh1{
+margin:0;
+font-size:21px;
+font-weight:800;
 }
-
-.logo {
-    font-size: 22px;
-    font-weight: 800;
+headerp{
+margin:4px00;
+font-size:12px;
+opacity:0.7;
 }
-
-.version {
-    background: #111;
-    color: white;
-    padding: 7px 11px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
+.container{
+max-width:700px;
+margin:auto;
+padding:14px;
 }
-
-/* CARDS */
-
-.card {
-    background: white;
-    border-radius: 20px;
-    padding: 16px;
-    margin-bottom: 13px;
-    box-shadow: 0 2px 15px rgba(0,0,0,.06);
+.card{
+background:white;
+border-radius:16px;
+padding:14px;
+margin-bottom:12px;
+box-shadow:02px12pxrgba(0,0,0,0.06);
 }
-
-/* INPUTS */
-
-label {
-    display: block;
-    font-size: 11px;
-    font-weight: 800;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    margin-bottom: 7px;
+.field-label{
+font-size:12px;
+font-weight:700;
+margin-bottom:7px;
+color:#555;
 }
-
-.input-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 13px;
+.search-row{
+display:flex;
+gap:8px;
+margin-bottom:10px;
 }
-
-.input-wrapper {
-    flex: 1;
+.search-rowinput{
+flex:1;
+min-width:0;
 }
-
-input {
-    width: 100%;
-    border: 1px solid #ddd;
-    background: #fafafa;
-    border-radius: 13px;
-    padding: 14px 13px;
-    font-size: 16px;
-    outline: none;
+input{
+width:100%;
+height:46px;
+border:1pxsolid#ddd;
+border-radius:11px;
+padding:013px;
+font-size:15px;
+outline:none;
+background:white;
 }
-
-input:focus {
-    border-color: #111;
-    background: white;
+input:focus{
+border-color:#111;
 }
-
-.location-button {
-    width: 47px;
-    border: none;
-    border-radius: 13px;
-    background: #111;
-    color: white;
-    font-size: 22px;
+button{
+border:0;
+border-radius:11px;
+min-height:44px;
+padding:014px;
+font-weight:700;
+cursor:pointer;
+font-size:14px;
 }
-
-.swap-button {
-    width: 44px;
-    height: 44px;
-    margin-top: 24px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 12px;
-    font-size: 20px;
+.black-btn{
+background:#111;
+color:white;
 }
-
-/* BUTTON */
-
-.calculate {
-    width: 100%;
-    border: none;
-    border-radius: 14px;
-    padding: 15px;
-    background: #111;
-    color: white;
-    font-size: 16px;
-    font-weight: 800;
+.light-btn{
+background:#eee;
+color:#111;
 }
-
-.calculate:disabled {
-    opacity: .6;
+.location-btn{
+width:100%;
+margin-bottom:10px;
+background:#f0f0f0;
 }
-
-/* MAP */
-
-.map {
-    height: 270px;
-    border-radius: 18px;
-    overflow: hidden;
-    background: #e8e8e8;
-    position: relative;
+.swap-btn{
+width:100%;
+margin:4px012px;
+background:#111;
+color:white;
 }
-
-.map iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
+#map{
+height:430px;
+width:100%;
+border-radius:14px;
+overflow:hidden;
 }
-
-.map-label {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background: white;
-    padding: 8px 10px;
-    border-radius: 10px;
-    font-size: 11px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.15);
+.map-help{
+font-size:12px;
+color:#666;
+margin-top:8px;
+text-align:center;
 }
-
-/* TRIP INFO */
-
-.trip-info {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 12px;
+.area-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:7px;
+margin-top:8px;
 }
-
-.pill {
-    background: #f1f1f1;
-    padding: 8px 11px;
-    border-radius: 20px;
-    font-size: 13px;
+.area-btn{
+background:#f1f1f1;
+min-height:38px;
+padding:5px;
+font-size:12px;
 }
-
-/* RESULTS */
-
-.results {
-    display: grid;
-    gap: 10px;
+.suggestions{
+position:relative;
+z-index:2000;
 }
-
-.result {
-    border-radius: 16px;
-    padding: 15px;
-    border: 1px solid #eee;
+.suggestion-list{
+position:absolute;
+left:0;
+right:0;
+top:48px;
+background:white;
+border:1pxsolid#ddd;
+border-radius:11px;
+overflow:hidden;
+box-shadow:06px20pxrgba(0,0,0,0.12);
+z-index:3000;
 }
-
-.result-title {
-    color: #666;
-    font-size: 13px;
+.suggestion-item{
+padding:12px;
+border-bottom:1pxsolid#eee;
+font-size:14px;
+cursor:pointer;
 }
-
-.price {
-    font-size: 30px;
-    font-weight: 850;
-    margin-top: 3px;
+.suggestion-item:last-child{
+border-bottom:0;
 }
-
-.dart {
-    background: #f2f2f2;
+.suggestion-item:hover{
+background:#f5f5f5;
 }
-
-.runner,
-.ride {
-    border: 2px solid #111;
+.calculate-btn{
+width:100%;
+background:#111;
+color:white;
+height:52px;
+font-size:16px;
+margin-top:12px;
 }
-
-/* TEXT */
-
-.note {
-    color: #666;
-    font-size: 12px;
-    line-height: 1.55;
+.result-card{
+display:none;
 }
-
-.small {
-    color: #888;
-    font-size: 11px;
-    line-height: 1.5;
-    margin-top: 12px;
+.route-summary{
+display:grid;
+grid-template-columns:1fr1fr;
+gap:8px;
+margin-bottom:12px;
 }
-
-.error {
-    color: #b00020;
-    font-size: 13px;
-    margin-top: 9px;
+.summary-box{
+background:#f5f5f5;
+border-radius:12px;
+padding:12px;
+text-align:center;
 }
-
-/* HIDDEN */
-
-.hidden {
-    display: none;
+.summary-value{
+font-size:21px;
+font-weight:800;
 }
-
-/* DESKTOP */
-
-@media (min-width: 600px) {
-
-    .results {
-        grid-template-columns:
-            repeat(3, 1fr);
-    }
-
+.summary-label{
+font-size:11px;
+color:#666;
+margin-top:2px;
 }
-
+.fare{
+border:1pxsolid#ddd;
+border-radius:13px;
+padding:13px;
+margin-top:8px;
+}
+.fare-title{
+font-size:13px;
+font-weight:700;
+color:#555;
+}
+.fare-price{
+font-size:29px;
+font-weight:900;
+margin-top:2px;
+}
+.fare-note{
+font-size:11px;
+color:#777;
+margin-top:2px;
+}
+.dart{
+background:#f3f3f3;
+}
+.runner{
+border:2pxsolid#111;
+}
+.ride{
+border:1pxsolid#aaa;
+}
+.notice{
+font-size:11px;
+color:#777;
+line-height:1.5;
+margin-top:12px;
+}
+.loading{
+display:none;
+text-align:center;
+padding:12px;
+font-size:13px;
+color:#555;
+}
+.error{
+display:none;
+background:#fff0f0;
+color:#a00000;
+padding:10px;
+border-radius:10px;
+font-size:13px;
+margin-top:10px;
+}
+.pin-label{
+background:#111;
+color:white;
+border-radius:8px;
+padding:4px7px;
+font-size:11px;
+font-weight:700;
+white-space:nowrap;
+border:0;
+}
+@media(max-width:420px){
+.area-grid{
+grid-template-columns:repeat(2,1fr);
+}
+#map{
+height:390px;
+}
+}
 </style>
 </head>
-
 <body>
-
-<div class="app">
-
-    <!-- HEADER -->
-
-    <div class="header">
-
-        <div class="logo">
-            Community Fare Checker
-        </div>
-
-        <div class="version">
-            V1
-        </div>
-
-    </div>
-
-
-    <!-- LOCATION INPUT -->
-
-    <div class="card">
-
-        <label>
-            Pickup
-        </label>
-
-        <div class="input-row">
-
-            <div class="input-wrapper">
-
-                <input
-                    id="pickup"
-                    type="text"
-                    placeholder="Search pickup location"
-                    autocomplete="off"
-                >
-
-            </div>
-
-            <button
-                class="location-button"
-                id="locationButton"
-                title="Use my location"
-            >
-                ⌖
-            </button>
-
-        </div>
-
-
-        <label>
-            Destination
-        </label>
-
-        <div class="input-row">
-
-            <div class="input-wrapper">
-
-                <input
-                    id="destination"
-                    type="text"
-                    placeholder="Search destination"
-                    autocomplete="off"
-                >
-
-            </div>
-
-            <button
-                class="swap-button"
-                id="swapButton"
-                title="Swap locations"
-            >
-                ↕
-            </button>
-
-        </div>
-
-
-        <button
-            class="calculate"
-            id="calculateButton"
-        >
-            Calculate Fare
-        </button>
-
-        <div
-            class="error"
-            id="error"
-        ></div>
-
-    </div>
-
-
-    <!-- MAP -->
-
-    <div class="card">
-
-        <div class="map">
-
-            <iframe
-                id="mapFrame"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-
-            <div class="map-label">
-                Road route preview
-            </div>
-
-        </div>
-
-
-        <div class="trip-info">
-
-            <div
-                class="pill"
-                id="distance"
-            >
-                Distance: —
-            </div>
-
-            <div
-                class="pill"
-                id="duration"
-            >
-                Time: —
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- RESULTS -->
-
-    <div
-        class="card hidden"
-        id="resultsCard"
-    >
-
-        <div class="results">
-
-
-            <div class="result dart">
-
-                <div class="result-title">
-                    DART Reference
-                </div>
-
-                <div
-                    class="price"
-                    id="dartPrice"
-                >
-                    $0.00
-                </div>
-
-            </div>
-
-
-            <div class="result runner">
-
-                <div class="result-title">
-                    Personal Runner
-                </div>
-
-                <div
-                    class="price"
-                    id="runnerPrice"
-                >
-                    $0.00
-                </div>
-
-            </div>
-
-
-            <div class="result ride">
-
-                <div class="result-title">
-                    Personal Ride
-                </div>
-
-                <div
-                    class="price"
-                    id="ridePrice"
-                >
-                    $0.00
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-        <p class="note">
-
-            Community price is set at
-            <strong>25% below the DART reference</strong>.
-
-            Runner minimum:
-            <strong>$4.00</strong>.
-
-            Personal Ride minimum:
-            <strong>$5.00</strong>.
-
-            Final prices are rounded to the nearest
-            <strong>$0.50</strong>.
-
-        </p>
-
-
-        <p class="small">
-
-            V1 is a price checker only.
-            No booking, driver matching, payment,
-            accounts or commission.
-
-        </p>
-
-    </div>
-
-
-    <!-- INFO -->
-
-    <div class="card">
-
-        <div class="note">
-
-            <strong>Community Fare Checker</strong>
-
-            <br><br>
-
-            Standardized community pricing tool
-            for Brunei personal runners and
-            personal rides.
-
-        </div>
-
-    </div>
-
+<header>
+<h1>CommunityFareChecker</h1>
+<p>Community-standardfarereferenceforBrunei</p>
+</header>
+<divclass="container">
+<!--LOCATIONS-->
+<divclass="card">
+<divclass="field-label">PICKUP</div>
+<divclass="search-row">
+<divclass="suggestions"style="flex:1;">
+<input
+id="pickupInput"
+type="text"
+placeholder="Searchpickuplocation"
+autocomplete="off"
+/>
+<divid="pickupSuggestions"class="suggestion-list"></div>
 </div>
-
-
+<button
+class="light-btn"
+onclick="useCurrentLocation('pickup')"
+title="Usecurrentlocation"
+>
+📍
+</button>
+</div>
+<divclass="field-label">DESTINATION</div>
+<divclass="search-row">
+<divclass="suggestions"style="flex:1;">
+<input
+id="destinationInput"
+type="text"
+placeholder="Searchdestination"
+autocomplete="off"
+/>
+<divid="destinationSuggestions"class="suggestion-list"></div>
+</div>
+<button
+class="light-btn"
+onclick="useCurrentLocation('destination')"
+title="Usecurrentlocation"
+>
+📍
+</button>
+</div>
+<buttonclass="swap-btn"onclick="swapLocations()">
+⇅SwapPickup&Destination
+</button>
+<divclass="field-label">BRUNEIAREAQUICKSEARCH</div>
+<divid="areaGrid"class="area-grid"></div>
+</div>
+<!--MAP-->
+<divclass="card">
+<divid="map"></div>
+<divclass="map-help">
+Dragthepickup/destinationpinstofine-tunetheexactlocation.
+</div>
+</div>
+<!--CALCULATE-->
+<divclass="card">
+<buttonclass="calculate-btn"onclick="calculateRoute()">
+CalculateFare
+</button>
+<divid="loading"class="loading">
+Calculatingdrivingroute...
+</div>
+<divid="error"class="error"></div>
+</div>
+<!--RESULT-->
+<divid="resultCard"class="cardresult-card">
+<divclass="route-summary">
+<divclass="summary-box">
+<divid="distanceValue"class="summary-value">-</div>
+<divclass="summary-label">DRIVINGDISTANCE</div>
+</div>
+<divclass="summary-box">
+<divid="durationValue"class="summary-value">-</div>
+<divclass="summary-label">ESTIMATEDTIME</div>
+</div>
+</div>
+<divclass="faredart">
+<divclass="fare-title">DARTReference</div>
+<divid="dartPrice"class="fare-price">$0.00</div>
+<divclass="fare-note">
+Approximatereferencebasedonthecommunity'scurrentDARTtariffmodel.
+</div>
+</div>
+<divclass="farerunner">
+<divclass="fare-title">PersonalRunner</div>
+<divid="runnerPrice"class="fare-price">$0.00</div>
+<divclass="fare-note">
+25%belowDART·Minimum$5
+</div>
+</div>
+<divclass="fareride">
+<divclass="fare-title">PersonalRide</div>
+<divid="ridePrice"class="fare-price">$0.00</div>
+<divclass="fare-note">
+25%belowDART·Minimum$5
+</div>
+</div>
+<divclass="notice">
+Communitypricingisasuggestedstandardandisnotoperatedby
+DARToranyothercompany.
+ThisVersion1checkerprovidespricereferencesonly.
+Itdoesnotprovidebooking,drivermatching,paymentprocessing,
+accountsorcommissioncollection.
+Mapdata©OpenStreetMapcontributors.
+RoutingprovidedbyOSRM.
+</div>
+</div>
+</div>
+<!--Leaflet-->
+<scriptsrc="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-
-/*
-====================================================
-COMMUNITY FARE CHECKER — VERSION 1
-====================================================
-
-FLOW:
-
-Pickup
-   ↓
-Destination
-   ↓
-Geocode locations
-   ↓
-Calculate road distance/time
-   ↓
-DART reference
-   ↓
-25% reduction
-   ↓
-Minimum fare
-   ↓
-Nearest $0.50
-   ↓
-Display prices
-
-====================================================
-*/
-
-
-/*
-====================================================
-CONFIGURATION
-====================================================
-*/
-
-const CONFIG = {
-
-    runnerMinimum: 4.00,
-
-    rideMinimum: 5.00,
-
-    communityReduction: 0.25,
-
-    roundUnit: 0.50
-
+/*=========================================================
+SETTINGS
+=========================================================*/
+constSETTINGS={
+runnerMinimum:5.00,
+rideMinimum:5.00,
+communityReduction:0.25,
+roundUnit:0.50
 };
-
-
-/*
-====================================================
-STATE
-====================================================
-*/
-
-let pickupCoordinates = null;
-
-
-/*
-====================================================
-HELPERS
-====================================================
-*/
-
-function money(value) {
-
-    return "$" + value.toFixed(2);
-
-}
-
-
-function roundToNearest50(value) {
-
-    return Math.round(
-        value / CONFIG.roundUnit
-    ) * CONFIG.roundUnit;
-
-}
-
-
-/*
-====================================================
-DART REFERENCE
-====================================================
-
-IMPORTANT:
-
-This is the part you can change later
-when you finalize the exact DART tariff
-formula for the community system.
-
-Current V1 approximation:
-
-Under 5 km:
-    $5 minimum/reference
-
-5–20 km:
-    $0.46/km
-
-Over 20 km:
-    $0.80/km
-
-====================================================
-*/
-
-function calculateDartReference(
-    distanceKm,
-    durationMinutes
-) {
-
-    let fare;
-
-    if (distanceKm < 5) {
-
-        fare = 5.00;
-
-    }
-
-    else if (distanceKm <= 20) {
-
-        fare = distanceKm * 0.46;
-
-    }
-
-    else {
-
-        fare = distanceKm * 0.80;
-
-    }
-
-    return fare;
-
-}
-
-
-/*
-====================================================
-COMMUNITY PRICE
-====================================================
-*/
-
-function calculateCommunityPrice(
-    dartFare,
-    minimum
-) {
-
-    const reducedFare =
-        dartFare *
-        (1 - CONFIG.communityReduction);
-
-    const minimumApplied =
-        Math.max(
-            minimum,
-            reducedFare
-        );
-
-    return roundToNearest50(
-        minimumApplied
-    );
-
-}
-
-
-/*
-====================================================
-GEOCODING
-====================================================
-
-Uses OpenStreetMap Nominatim.
-
-====================================================
-*/
-
-async function geocodeLocation(
-    searchText
-) {
-
-    const query =
-        searchText +
-        ", Brunei";
-
-    const url =
-        "https://nominatim.openstreetmap.org/" +
-        "search" +
-        "?format=jsonv2" +
-        "&limit=1" +
-        "&countrycodes=bn" +
-        "&q=" +
-        encodeURIComponent(query);
-
-
-    const response =
-        await fetch(
-            url,
-            {
-                headers: {
-                    "Accept":
-                        "application/json"
-                }
-            }
-        );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            "Location search failed."
-        );
-
-    }
-
-
-    const data =
-        await response.json();
-
-
-    if (!data.length) {
-
-        throw new Error(
-            "Location not found: " +
-            searchText
-        );
-
-    }
-
-
-    return {
-
-        latitude:
-            Number(data[0].lat),
-
-        longitude:
-            Number(data[0].lon),
-
-        name:
-            data[0].display_name
-
-    };
-
-}
-
-
-/*
-====================================================
-ROUTING
-====================================================
-
-Uses OSRM road routing.
-
-====================================================
-*/
-
-async function calculateRoute(
-    pickup,
-    destination
-) {
-
-    const url =
-        "https://router.project-osrm.org/" +
-        "route/v1/driving/" +
-
-        pickup.longitude +
-        "," +
-        pickup.latitude +
-
-        ";" +
-
-        destination.longitude +
-        "," +
-        destination.latitude +
-
-        "?overview=false";
-
-
-    const response =
-        await fetch(url);
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            "Routing service unavailable."
-        );
-
-    }
-
-
-    const data =
-        await response.json();
-
-
-    if (
-        data.code !== "Ok" ||
-        !data.routes ||
-        !data.routes.length
-    ) {
-
-        throw new Error(
-            "Unable to calculate route."
-        );
-
-    }
-
-
-    const route =
-        data.routes[0];
-
-
-    return {
-
-        distanceKm:
-            route.distance / 1000,
-
-        durationMinutes:
-            route.duration / 60
-
-    };
-
-}
-
-
-/*
-====================================================
+/*=========================================================
+BRUNEIMAPDEFAULT
+=========================================================*/
+constDEFAULT_CENTER=[4.9031,114.9398];
+/*=========================================================
+AREAQUICKSEARCH
+=========================================================*/
+constBRUNEI_AREAS=[
+"BandarSeriBegawan",
+"Gadong",
+"Kiulap",
+"Kiarong",
+"Menglait",
+"Beribi",
+"BatuBersurat",
+"Tungku",
+"Rimba",
+"Mata-Mata",
+"Jerudong",
+"Sengkurong",
+"Kilanas",
+"Bunut",
+"TanjongBunut",
+"Madang",
+"Mentiri",
+"Muara",
+"Berakas",
+"Lambak",
+"Salambigar",
+"Serusop",
+"Airport",
+"AnggerekDesa",
+"Katok",
+"Subok",
+"JalanKebangsaan",
+"JalanTutong",
+"Tutong",
+"Telisai",
+"KualaBelait",
+"Seria",
+"Lumut",
+"SungaiLiang",
+"Labi"
+];
+/*=========================================================
 MAP
-====================================================
-*/
-
-function showMap(
-    pickup,
-    destination
-) {
-
-    const minLat =
-        Math.min(
-            pickup.latitude,
-            destination.latitude
-        );
-
-    const maxLat =
-        Math.max(
-            pickup.latitude,
-            destination.latitude
-        );
-
-    const minLon =
-        Math.min(
-            pickup.longitude,
-            destination.longitude
-        );
-
-    const maxLon =
-        Math.max(
-            pickup.longitude,
-            destination.longitude
-        );
-
-
-    const latPadding =
-        Math.max(
-            (maxLat - minLat) * 0.25,
-            0.005
-        );
-
-
-    const lonPadding =
-        Math.max(
-            (maxLon - minLon) * 0.25,
-            0.005
-        );
-
-
-    const bbox =
-
-        (minLon - lonPadding) +
-        "," +
-
-        (minLat - latPadding) +
-        "," +
-
-        (maxLon + lonPadding) +
-        "," +
-
-        (maxLat + latPadding);
-
-
-    const marker =
-        pickup.latitude +
-        "," +
-        pickup.longitude;
-
-
-    const mapURL =
-
-        "https://www.openstreetmap.org/" +
-        "export/embed.html" +
-
-        "?bbox=" +
-        encodeURIComponent(bbox) +
-
-        "&layer=mapnik" +
-
-        "&marker=" +
-        encodeURIComponent(marker);
-
-
-    document
-        .getElementById("mapFrame")
-        .src = mapURL;
-
+=========================================================*/
+constmap=L.map("map").setView(DEFAULT_CENTER,12);
+L.tileLayer(
+"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+maxZoom:19,
+attribution:'&copy;OpenStreetMapcontributors'
 }
-
-
+).addTo(map);
+/*=========================================================
+MAPSTATE
+=========================================================*/
+letpickupMarker=null;
+letdestinationMarker=null;
+letrouteLayer=null;
+letpickupCoords=null;
+letdestinationCoords=null;
+/*=========================================================
+CUSTOMPINICON
+=========================================================*/
+functioncreatePinIcon(label){
+returnL.divIcon({
+className:"",
+html:`
+<divstyle="
+display:flex;
+flex-direction:column;
+align-items:center;
+">
+<divclass="pin-label">${label}</div>
+<divstyle="
+width:18px;
+height:18px;
+background:#111;
+border:3pxsolidwhite;
+border-radius:50%;
+box-shadow:02px7pxrgba(0,0,0,.35);
+margin-top:4px;
+"></div>
+</div>
+`,
+iconSize:[80,45],
+iconAnchor:[40,35]
+});
+}
+/*=========================================================
+REVERSEGEOCODING
+=========================================================*/
+asyncfunctionreverseGeocode(lat,lon){
+consturl=
+"https://nominatim.openstreetmap.org/reverse?"+
+newURLSearchParams({
+format:"jsonv2",
+lat:lat,
+lon:lon,
+zoom:18,
+addressdetails:1,
+"accept-language":"en"
+});
+constresponse=awaitfetch(url,{
+headers:{
+"Accept":"application/json"
+}
+});
+if(!response.ok){
+thrownewError("Reversegeocodingfailed.");
+}
+constdata=awaitresponse.json();
+returndata.display_name||`${lat.toFixed(5)},${lon.toFixed(5)}`;
+}
+/*=========================================================
+SEARCH
+=========================================================*/
+letsearchTimer=null;
+functionsetupSearch(inputId,suggestionsId,type){
+constinput=document.getElementById(inputId);
+constsuggestions=document.getElementById(suggestionsId);
+input.addEventListener("input",function(){
+constquery=input.value.trim();
+clearTimeout(searchTimer);
+if(query.length<3){
+suggestions.innerHTML="";
+return;
+}
 /*
-====================================================
-CALCULATE BUTTON
-====================================================
+NominatimdoesNOTpermitautocomplete.
+Thereforewedeliberatelywaituntiltheuser
+hasstoppedtypingandonlyperformanormalsearch.
 */
-
-document
-    .getElementById("calculateButton")
-    .addEventListener(
-        "click",
-        async function () {
-
-            const pickupInput =
-                document
-                    .getElementById("pickup")
-                    .value
-                    .trim();
-
-
-            const destinationInput =
-                document
-                    .getElementById("destination")
-                    .value
-                    .trim();
-
-
-            const error =
-                document
-                    .getElementById("error");
-
-
-            const button =
-                document
-                    .getElementById(
-                        "calculateButton"
-                    );
-
-
-            const results =
-                document
-                    .getElementById(
-                        "resultsCard"
-                    );
-
-
-            error.textContent = "";
-
-            results.classList.add(
-                "hidden"
-            );
-
-
-            if (
-                !pickupInput ||
-                !destinationInput
-            ) {
-
-                error.textContent =
-                    "Please enter both pickup and destination.";
-
-                return;
-
-            }
-
-
-            button.disabled = true;
-
-            button.textContent =
-                "Calculating...";
-
-
-            try {
-
-
-                /*
-                PICKUP
-                */
-
-                let pickup;
-
-                if (pickupCoordinates) {
-
-                    pickup =
-                        pickupCoordinates;
-
-                }
-
-                else {
-
-                    pickup =
-                        await geocodeLocation(
-                            pickupInput
-                        );
-
-                }
-
-
-                /*
-                DESTINATION
-                */
-
-                const destination =
-                    await geocodeLocation(
-                        destinationInput
-                    );
-
-
-                /*
-                ROUTE
-                */
-
-                const route =
-                    await calculateRoute(
-                        pickup,
-                        destination
-                    );
-
-
-                /*
-                DISPLAY DISTANCE
-                */
-
-                document
-                    .getElementById(
-                        "distance"
-                    )
-                    .textContent =
-                    "Distance: " +
-                    route.distanceKm
-                        .toFixed(1) +
-                    " km";
-
-
-                /*
-                DISPLAY TIME
-                */
-
-                document
-                    .getElementById(
-                        "duration"
-                    )
-                    .textContent =
-                    "Time: " +
-                    Math.round(
-                        route.durationMinutes
-                    ) +
-                    " min";
-
-
-                /*
-                MAP
-                */
-
-                showMap(
-                    pickup,
-                    destination
-                );
-
-
-                /*
-                DART
-                */
-
-                const dartFare =
-                    calculateDartReference(
-                        route.distanceKm,
-                        route.durationMinutes
-                    );
-
-
-                /*
-                COMMUNITY
-                */
-
-                const runnerFare =
-                    calculateCommunityPrice(
-                        dartFare,
-                        CONFIG.runnerMinimum
-                    );
-
-
-                const rideFare =
-                    calculateCommunityPrice(
-                        dartFare,
-                        CONFIG.rideMinimum
-                    );
-
-
-                /*
-                DISPLAY
-                */
-
-                document
-                    .getElementById(
-                        "dartPrice"
-                    )
-                    .textContent =
-                    money(
-                        roundToNearest50(
-                            dartFare
-                        )
-                    );
-
-
-                document
-                    .getElementById(
-                        "runnerPrice"
-                    )
-                    .textContent =
-                    money(
-                        runnerFare
-                    );
-
-
-                document
-                    .getElementById(
-                        "ridePrice"
-                    )
-                    .textContent =
-                    money(
-                        rideFare
-                    );
-
-
-                results.classList.remove(
-                    "hidden"
-                );
-
-
-            }
-
-            catch (err) {
-
-                console.error(err);
-
-                error.textContent =
-                    err.message ||
-                    "Something went wrong.";
-
-            }
-
-            finally {
-
-                button.disabled =
-                    false;
-
-                button.textContent =
-                    "Calculate Fare";
-
-            }
-
-        }
-    );
-
-
+searchTimer=setTimeout(async()=>{
+try{
+suggestions.innerHTML=
+`<divclass="suggestion-item">Searching...</div>`;
+consturl=
+"https://nominatim.openstreetmap.org/search?"+
+newURLSearchParams({
+format:"jsonv2",
+q:query+",Brunei",
+countrycodes:"bn",
+limit:5,
+addressdetails:1,
+"accept-language":"en"
+});
+constresponse=awaitfetch(url,{
+headers:{
+"Accept":"application/json"
+}
+});
+if(!response.ok){
+thrownewError("Searchfailed.");
+}
+constresults=awaitresponse.json();
+suggestions.innerHTML="";
+if(!results.length){
+suggestions.innerHTML=
+`<divclass="suggestion-item">Nolocationfound</div>`;
+return;
+}
+results.forEach(result=>{
+constitem=
+document.createElement("div");
+item.className="suggestion-item";
+item.textContent=result.display_name;
+item.onclick=()=>{
+setLocation(
+type,
+parseFloat(result.lat),
+parseFloat(result.lon),
+result.display_name
+);
+suggestions.innerHTML="";
+input.value=result.display_name;
+};
+suggestions.appendChild(item);
+});
+}catch(error){
+suggestions.innerHTML=
+`<divclass="suggestion-item">
+Searchunavailable.Trydroppingapin.
+</div>`;
+}
+},1200);
+});
+}
+setupSearch(
+"pickupInput",
+"pickupSuggestions",
+"pickup"
+);
+setupSearch(
+"destinationInput",
+"destinationSuggestions",
+"destination"
+);
+/*=========================================================
+SETLOCATION
+=========================================================*/
+functionsetLocation(type,lat,lon,name){
+constcoords=[lat,lon];
+if(type==="pickup"){
+pickupCoords=coords;
+if(pickupMarker){
+map.removeLayer(pickupMarker);
+}
+pickupMarker=L.marker(
+coords,
+{
+draggable:true,
+icon:createPinIcon("PICKUP")
+}
+).addTo(map);
+pickupMarker.on("dragend",asyncfunction(e){
+constpos=e.target.getLatLng();
+pickupCoords=[
+pos.lat,
+pos.lng
+];
+try{
+constaddress=
+awaitreverseGeocode(
+pos.lat,
+pos.lng
+);
+document.getElementById(
+"pickupInput"
+).value=address;
+}catch{}
+});
+document.getElementById(
+"pickupInput"
+).value=name||`${lat},${lon}`;
+}
+if(type==="destination"){
+destinationCoords=coords;
+if(destinationMarker){
+map.removeLayer(destinationMarker);
+}
+destinationMarker=L.marker(
+coords,
+{
+draggable:true,
+icon:createPinIcon("DESTINATION")
+}
+).addTo(map);
+destinationMarker.on("dragend",asyncfunction(e){
+constpos=e.target.getLatLng();
+destinationCoords=[
+pos.lat,
+pos.lng
+];
+try{
+constaddress=
+awaitreverseGeocode(
+pos.lat,
+pos.lng
+);
+document.getElementById(
+"destinationInput"
+).value=address;
+}catch{}
+});
+document.getElementById(
+"destinationInput"
+).value=name||`${lat},${lon}`;
+}
+map.setView(coords,15);
+}
+/*=========================================================
+CURRENTLOCATION
+=========================================================*/
+functionuseCurrentLocation(type){
+if(!navigator.geolocation){
+showError(
+"Yourbrowserdoesnotsupportlocationservices."
+);
+return;
+}
+navigator.geolocation.getCurrentPosition(
+asyncfunction(position){
+constlat=
+position.coords.latitude;
+constlon=
+position.coords.longitude;
+try{
+constaddress=
+awaitreverseGeocode(lat,lon);
+setLocation(
+type,
+lat,
+lon,
+address
+);
+}catch{
+setLocation(
+type,
+lat,
+lon,
+`${lat.toFixed(5)},${lon.toFixed(5)}`
+);
+}
+},
+function(){
+showError(
+"Unabletogetyourcurrentlocation.Pleaseallowlocationaccess."
+);
+},
+{
+enableHighAccuracy:true,
+timeout:10000
+}
+);
+}
+/*=========================================================
+MAPCLICK
+=========================================================*/
+letnextPinType="pickup";
+map.on("click",asyncfunction(e){
 /*
-====================================================
+Ifneitherpinexists,firstclick=pickup.
+Ifpickupexistsbutdestinationdoesn't,click=destination.
+Otherwiseclickingthemapreplacesdestination.
+*/
+if(!pickupCoords){
+nextPinType="pickup";
+}elseif(!destinationCoords){
+nextPinType="destination";
+}else{
+nextPinType="destination";
+}
+try{
+constaddress=
+awaitreverseGeocode(
+e.latlng.lat,
+e.latlng.lng
+);
+setLocation(
+nextPinType,
+e.latlng.lat,
+e.latlng.lng,
+address
+);
+}catch{
+setLocation(
+nextPinType,
+e.latlng.lat,
+e.latlng.lng,
+`${e.latlng.lat.toFixed(5)},${e.latlng.lng.toFixed(5)}`
+);
+}
+});
+/*=========================================================
 SWAP
-====================================================
-*/
-
-document
-    .getElementById("swapButton")
-    .addEventListener(
-        "click",
-        function () {
-
-            const pickup =
-                document
-                    .getElementById(
-                        "pickup"
-                    );
-
-            const destination =
-                document
-                    .getElementById(
-                        "destination"
-                    );
-
-
-            const temporary =
-                pickup.value;
-
-
-            pickup.value =
-                destination.value;
-
-
-            destination.value =
-                temporary;
-
-
-            pickupCoordinates =
-                null;
-
-        }
-    );
-
-
+=========================================================*/
+functionswapLocations(){
+if(!pickupCoords||!destinationCoords){
+return;
+}
+constoldPickup=
+[...pickupCoords];
+constoldDestination=
+[...destinationCoords];
+constpickupName=
+document.getElementById(
+"pickupInput"
+).value;
+constdestinationName=
+document.getElementById(
+"destinationInput"
+).value;
+setLocation(
+"pickup",
+oldDestination[0],
+oldDestination[1],
+destinationName
+);
+setLocation(
+"destination",
+oldPickup[0],
+oldPickup[1],
+pickupName
+);
+}
+/*=========================================================
+AREABUTTONS
+=========================================================*/
+constareaGrid=
+document.getElementById("areaGrid");
+BRUNEI_AREAS.forEach(area=>{
+constbutton=
+document.createElement("button");
+button.className=
+"area-btn";
+button.textContent=
+area;
+button.onclick=()=>{
+document.getElementById(
+"pickupInput"
+).value=area;
+searchArea(area);
+};
+areaGrid.appendChild(button);
+});
+asyncfunctionsearchArea(area){
+try{
+consturl=
+"https://nominatim.openstreetmap.org/search?"+
+newURLSearchParams({
+format:"jsonv2",
+q:area+",Brunei",
+countrycodes:"bn",
+limit:1,
+addressdetails:1
+});
+constresponse=
+awaitfetch(url);
+constresults=
+awaitresponse.json();
+if(!results.length){
+showError(
+"Areacouldnotbefound."
+);
+return;
+}
+constresult=
+results[0];
+setLocation(
+"pickup",
+parseFloat(result.lat),
+parseFloat(result.lon),
+result.display_name
+);
+}catch{
+showError(
+"Areasearchfailed."
+);
+}
+}
+/*=========================================================
+ROUTING—OSRM
+=========================================================*/
+asyncfunctioncalculateRoute(){
+hideError();
+if(!pickupCoords){
+showError(
+"Pleaseselectapickuplocation."
+);
+return;
+}
+if(!destinationCoords){
+showError(
+"Pleaseselectadestination."
+);
+return;
+}
+setLoading(true);
+try{
+constpickupLon=
+pickupCoords[1];
+constpickupLat=
+pickupCoords[0];
+constdestinationLon=
+destinationCoords[1];
+constdestinationLat=
+destinationCoords[0];
+constcoordinates=
+`${pickupLon},${pickupLat};`+
+`${destinationLon},${destinationLat}`;
+consturl=
+`https://router.project-osrm.org/route/v1/driving/${coordinates}?`+
+newURLSearchParams({
+alternatives:"false",
+overview:"full",
+geometries:"geojson",
+steps:"false"
+});
+constresponse=
+awaitfetch(url);
+if(!response.ok){
+thrownewError(
+"Routingserverunavailable."
+);
+}
+constdata=
+awaitresponse.json();
+if(
+data.code!=="Ok"||
+!data.routes||
+!data.routes.length
+){
+thrownewError(
+"Nodrivingroutefound."
+);
+}
+constroute=
+data.routes[0];
+constdistanceKm=
+route.distance/1000;
+constdurationMinutes=
+route.duration/60;
+/*DRAWROUTE*/
+if(routeLayer){
+map.removeLayer(
+routeLayer
+);
+}
+routeLayer=
+L.geoJSON(
+{
+type:"Feature",
+geometry:route.geometry,
+properties:{}
+},
+{
+style:{
+color:"#111",
+weight:7,
+opacity:0.25
+}
+}
+).addTo(map);
+constrouteInner=
+L.geoJSON(
+{
+type:"Feature",
+geometry:route.geometry,
+properties:{}
+},
+{
+style:{
+color:"#111",
+weight:4,
+opacity:1
+}
+}
+).addTo(map);
 /*
-====================================================
-CURRENT LOCATION
-====================================================
+Keeptheinnerrouteattachedtothesame
+routeLayerreferencesowecanremoveboth.
 */
-
-document
-    .getElementById("locationButton")
-    .addEventListener(
-        "click",
-        function () {
-
-            const error =
-                document
-                    .getElementById(
-                        "error"
-                    );
-
-
-            if (!navigator.geolocation) {
-
-                error.textContent =
-                    "Your browser does not support location.";
-
-                return;
-
-            }
-
-
-            error.textContent =
-                "Getting your location...";
-
-
-            navigator.geolocation.getCurrentPosition(
-
-                async function(position) {
-
-                    try {
-
-                        const latitude =
-                            position.coords.latitude;
-
-                        const longitude =
-                            position.coords.longitude;
-
-
-                        pickupCoordinates = {
-
-                            latitude:
-                                latitude,
-
-                            longitude:
-                                longitude
-
-                        };
-
-
-                        /*
-                        Reverse geocode
-                        */
-
-                        const url =
-                            "https://nominatim.openstreetmap.org/" +
-                            "reverse" +
-
-                            "?format=jsonv2" +
-
-                            "&lat=" +
-                            latitude +
-
-                            "&lon=" +
-                            longitude;
-
-
-                        const response =
-                            await fetch(
-                                url,
-                                {
-                                    headers: {
-                                        "Accept":
-                                            "application/json"
-                                    }
-                                }
-                            );
-
-
-                        const data =
-                            await response.json();
-
-
-                        document
-                            .getElementById(
-                                "pickup"
-                            )
-                            .value =
-                            data.display_name ||
-                            "Current location";
-
-
-                        error.textContent =
-                            "";
-
-                    }
-
-                    catch (e) {
-
-                        error.textContent =
-                            "Could not identify your location.";
-
-                    }
-
-                },
-
-                function() {
-
-                    error.textContent =
-                        "Location permission was denied. Enter pickup manually.";
-
-                },
-
-                {
-
-                    enableHighAccuracy:
-                        false,
-
-                    timeout:
-                        10000,
-
-                    maximumAge:
-                        60000
-
-                }
-
-            );
-
-        }
-    );
-
-
+routeLayer=L.layerGroup([
+routeLayer,
+routeInner
+]);
+map.fitBounds(
+routeLayer.getBounds(),
+{
+padding:[35,35]
+}
+);
+/*DISPLAYDISTANCE*/
+document.getElementById(
+"distanceValue"
+).textContent=
+distanceKm.toFixed(1)+"km";
+/*DISPLAYTIME*/
+document.getElementById(
+"durationValue"
+).textContent=
+formatDuration(
+durationMinutes
+);
+/*CALCULATEFARES*/
+constdartFare=
+calculateDartFare(
+distanceKm
+);
+construnnerFare=
+calculateCommunityFare(
+dartFare,
+SETTINGS.runnerMinimum
+);
+constrideFare=
+calculateCommunityFare(
+dartFare,
+SETTINGS.rideMinimum
+);
+document.getElementById(
+"dartPrice"
+).textContent=
+formatMoney(dartFare);
+document.getElementById(
+"runnerPrice"
+).textContent=
+formatMoney(runnerFare);
+document.getElementById(
+"ridePrice"
+).textContent=
+formatMoney(rideFare);
+document.getElementById(
+"resultCard"
+).style.display=
+"block";
+document.getElementById(
+"resultCard"
+).scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+}catch(error){
+showError(
+error.message||
+"Unabletocalculateroute."
+);
+}
+setLoading(false);
+}
+/*=========================================================
+DARTREFERENCEFARE
+=========================================================*/
+functioncalculateDartFare(distanceKm){
+letfare;
+/*
+CurrentV1communityapproximation:
+Under5km=$5
+5–20km=$0.46/km
+Over20km=$0.80/km
+Thisshouldremainlabelledasanapproximation
+untiltheofficialDARTtariffmodelisfully
+convertedintoanexactcalculator.
+*/
+if(distanceKm<5){
+fare=5.00;
+}elseif(distanceKm<=20){
+fare=distanceKm*0.46;
+}else{
+fare=distanceKm*0.80;
+}
+returnroundToHalf(
+fare
+);
+}
+/*=========================================================
+COMMUNITYFARE
+=========================================================*/
+functioncalculateCommunityFare(
+dartFare,
+minimum
+){
+letprice=
+dartFare*
+(1-SETTINGS.communityReduction);
+price=
+Math.max(
+price,
+minimum
+);
+returnroundToHalf(
+price
+);
+}
+/*=========================================================
+ROUNDING
+=========================================================*/
+functionroundToHalf(value){
+returnMath.round(
+value/
+SETTINGS.roundUnit
+)*
+SETTINGS.roundUnit;
+}
+/*=========================================================
+MONEY
+=========================================================*/
+functionformatMoney(value){
+return"$"+
+value.toFixed(2);
+}
+/*=========================================================
+DURATION
+=========================================================*/
+functionformatDuration(minutes){
+minutes=
+Math.round(minutes);
+if(minutes<60){
+return`${minutes}min`;
+}
+consthours=
+Math.floor(minutes/60);
+constmins=
+minutes%60;
+if(mins===0){
+return`${hours}hr`;
+}
+return`${hours}hr${mins}min`;
+}
+/*=========================================================
+LOADING
+=========================================================*/
+functionsetLoading(show){
+document.getElementById(
+"loading"
+).style.display=
+show?"block":"none";
+}
+/*=========================================================
+ERRORS
+=========================================================*/
+functionshowError(message){
+consterror=
+document.getElementById(
+"error"
+);
+error.textContent=
+message;
+error.style.display=
+"block";
+}
+functionhideError(){
+document.getElementById(
+"error"
+).style.display=
+"none";
+}
+/*=========================================================
+CLOSESEARCHDROPDOWNSWHENCLICKINGOUTSIDE
+=========================================================*/
+document.addEventListener(
+"click",
+function(event){
+if(
+!event.target.closest(
+".suggestions"
+)
+){
+document.getElementById(
+"pickupSuggestions"
+).innerHTML="";
+document.getElementById(
+"destinationSuggestions"
+).innerHTML="";
+}
+}
+);
 </script>
-
 </body>
 </html>
+
+###OneimportantchangefromtheMapboxversion
+
+IdeliberatelydidnotmakeNominatimautocomplete.Nominatim’sofficialpolicyexplicitlyprohibitsclient-sideautocompleteandlimitsusagetoamaximumof1request/second.
+
+Sothisversionworkslike:
+
+Typelocation→wait~1.2sec→Search→chooseresult
+
+ratherthan:
+
+Typeeveryletter→constantlysearch
+
+ThatkeepstheV1withinthepublicNominatimrules.
+
+###Whatyounowhave
+
+NoMapboxtoken.NoMapboxaccount.NopaidAPIrequired.
+
+Thestackis:
+
+Leaflet
+→open-sourcemapinterface
+
+OpenStreetMap
+→mapdata
+
+Nominatim
+→locationsearch
+
+OSRM
+→drivingroute,distanceandestimatedtime
+
+OSRM’sofficialAPIsupportsthedrivingrouteendpointwe’reusing.
+
+**But:**ifyourCommunityFareCheckerbecomespopularandgetslotsofusers,weshouldeventuallymovethesearch/routingservicestodedicatedinfrastructureoraproviderwithanexplicitfreetier.OSM’stileandNominatimserversarenotunlimitedpublicAPIinfrastructure.
+
+Fortesting,developmentandasmallV1communitytool,thisisamuchbetterwaytogetstartedwithoutaMapboxtoken.
