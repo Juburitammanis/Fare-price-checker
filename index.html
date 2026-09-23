@@ -149,17 +149,17 @@
       margin-bottom: 18px;
     }
 
+    .fare-label {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 5px;
+    }
+
     .fare {
       font-size: 42px;
       line-height: 1;
       font-weight: 900;
       margin-bottom: 20px;
-    }
-
-    .fare-label {
-      font-size: 13px;
-      color: #777;
-      margin-bottom: 5px;
     }
 
     .details {
@@ -193,10 +193,10 @@
     }
 
     .community-note {
+      margin-top: 15px;
       font-size: 12px;
       color: #777;
       line-height: 1.5;
-      margin-top: 15px;
     }
 
     @media (max-width: 400px) {
@@ -217,426 +217,498 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="header">
-      <h1>Community Fare Checker</h1>
-      <p>Standard community pricing for Brunei rides and runners.</p>
-    </div>
+  <div class="header">
+    <h1>Community Fare Checker</h1>
+    <p>Standard community pricing for Brunei runners and personal rides.</p>
+  </div>
 
-    <div class="card">
+  <div class="card">
 
-      <span class="label">Service</span>
+    <span class="label">Service</span>
 
-      <div class="service-buttons">
-        <button class="service-btn active" id="runnerBtn" onclick="selectService('runner')">
-          📦 Runner
-        </button>
+    <div class="service-buttons">
 
-        <button class="service-btn" id="rideBtn" onclick="selectService('ride')">
-          🚗 Personal Ride
-        </button>
-      </div>
-
-      <span class="label">Pickup Kampong / Area</span>
-
-      <select id="pickup">
-        <option value="">Select pickup</option>
-      </select>
-
-      <span class="label">Destination Kampong / Area</span>
-
-      <select id="destination">
-        <option value="">Select destination</option>
-      </select>
-
-      <button class="swap-btn" onclick="swapLocations()">
-        ⇅ Swap Pickup & Destination
+      <button
+        class="service-btn active"
+        id="runnerBtn"
+        onclick="selectService('runner')"
+      >
+        📦 Runner
       </button>
 
-      <button class="calculate-btn" id="calculateBtn" onclick="calculateFare()">
-        Calculate Runner Fare
+      <button
+        class="service-btn"
+        id="rideBtn"
+        onclick="selectService('ride')"
+      >
+        🚗 Personal Ride
       </button>
 
-      <div class="loading" id="loading">
-        Calculating actual road distance…
-      </div>
-
-      <div class="error" id="error"></div>
-
     </div>
 
-    <div class="card result" id="result">
+    <span class="label">Pickup Kampong / Area</span>
 
-      <div class="result-title" id="serviceResult">
-        Runner
-      </div>
+    <select id="pickup">
+      <option value="">Select pickup</option>
+    </select>
 
-      <div class="route-name" id="routeName">
-        -
-      </div>
+    <span class="label">Destination Kampong / Area</span>
 
-      <div class="fare-label">
-        Standard Fare
-      </div>
+    <select id="destination">
+      <option value="">Select destination</option>
+    </select>
 
-      <div class="fare" id="fare">
-        BND $0
-      </div>
+    <button
+      class="swap-btn"
+      onclick="swapLocations()"
+    >
+      ⇅ Swap Pickup & Destination
+    </button>
 
-      <div class="details">
+    <button
+      class="calculate-btn"
+      id="calculateBtn"
+      onclick="calculateFare()"
+    >
+      Calculate Runner Fare
+    </button>
 
-        <div class="detail-box">
-          <div class="detail-label">
-            Actual Road Distance
-          </div>
-
-          <div class="detail-value" id="distance">
-            -
-          </div>
-        </div>
-
-        <div class="detail-box">
-          <div class="detail-label">
-            Estimated Drive Time
-          </div>
-
-          <div class="detail-value" id="duration">
-            -
-          </div>
-        </div>
-
-      </div>
-
-      <div class="basis" id="basis">
-        -
-      </div>
-
-      <div class="community-note">
-        Community reference pricing only. This is not an official DART tariff.
-      </div>
-
+    <div
+      class="loading"
+      id="loading"
+    >
+      Calculating actual road distance…
     </div>
+
+    <div
+      class="error"
+      id="error"
+    ></div>
 
   </div>
 
 
+  <div
+    class="card result"
+    id="result"
+  >
+
+    <div
+      class="result-title"
+      id="serviceResult"
+    >
+      Runner
+    </div>
+
+    <div
+      class="route-name"
+      id="routeName"
+    >
+      -
+    </div>
+
+    <div class="fare-label">
+      Standard Community Fare
+    </div>
+
+    <div
+      class="fare"
+      id="fare"
+    >
+      BND $0
+    </div>
+
+    <div class="details">
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Actual Road Distance
+        </div>
+
+        <div
+          class="detail-value"
+          id="distance"
+        >
+          -
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Estimated Drive Time
+        </div>
+
+        <div
+          class="detail-value"
+          id="duration"
+        >
+          -
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="basis"
+      id="basis"
+    >
+      -
+    </div>
+
+    <div class="community-note">
+      Community reference pricing only. Not an official DART tariff.
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
 
-  /*
-    ============================================================
-    COMMUNITY FARE CHECKER
-    ============================================================
+/*
+============================================================
+COMMUNITY FARE CHECKER
+============================================================
 
-    V1:
-    - Kampong to kampong
-    - No exact addresses
-    - No map
-    - Uses OSRM for actual road distance/time
-    - Runner / Personal Ride
-    - Whole-number fares
-    - BSB Runner maximum = $10
-    - BSB Personal Ride maximum = $15
-  */
+BASE COMMUNITY TARIFF
 
+First 5 km:
+    $5
 
-  let selectedService = "runner";
+5–20 km:
+    $0.35 per additional km
 
+Above 20 km:
+    $0.60 per additional km
 
-  /*
-    ------------------------------------------------------------
-    KAMPONG / AREA DATABASE
-    ------------------------------------------------------------
+WHOLE NUMBER:
+    Rounded to nearest BND whole dollar.
 
-    These are standardized reference points.
+SPECIAL ROUTE MAXIMUMS
 
-    They are NOT exact customer addresses.
-  */
+BSB ↔ BSB:
+    Runner       $10
+    Personal Ride $15
 
-  const kampongs = [
+BSB ↔ TUTONG:
+    Runner       $20
+    Personal Ride $20
 
-    // =========================
-    // BRUNEI-MUARA / BSB
-    // =========================
+BSB ↔ BELAIT / KB:
+    Runner       $35
+    Personal Ride $35
 
-    {
-      name: "Bandar Seri Begawan",
-      zone: "BSB",
-      lat: 4.9031,
-      lon: 114.9398
-    },
+The maximum is a CAP.
+It does not replace the underlying tariff.
 
-    {
-      name: "Gadong",
-      zone: "BSB",
-      lat: 4.9237,
-      lon: 114.9450
-    },
-
-    {
-      name: "Kiulap",
-      zone: "BSB",
-      lat: 4.9038,
-      lon: 114.9270
-    },
-
-    {
-      name: "Kiarong",
-      zone: "BSB",
-      lat: 4.8995,
-      lon: 114.9155
-    },
-
-    {
-      name: "Menglait",
-      zone: "BSB",
-      lat: 4.9265,
-      lon: 114.9255
-    },
-
-    {
-      name: "Beribi",
-      zone: "BSB",
-      lat: 4.8735,
-      lon: 114.9140
-    },
-
-    {
-      name: "Batu Bersurat",
-      zone: "BSB",
-      lat: 4.9205,
-      lon: 114.9395
-    },
-
-    {
-      name: "Tungku",
-      zone: "BSB",
-      lat: 4.9200,
-      lon: 114.9000
-    },
-
-    {
-      name: "Rimba",
-      zone: "BSB",
-      lat: 4.9440,
-      lon: 114.9060
-    },
-
-    {
-      name: "Mata-Mata",
-      zone: "BSB",
-      lat: 4.8800,
-      lon: 114.9100
-    },
-
-    {
-      name: "Jerudong",
-      zone: "BSB",
-      lat: 4.9700,
-      lon: 114.8380
-    },
-
-    {
-      name: "Sengkurong",
-      zone: "BSB",
-      lat: 4.9400,
-      lon: 114.8420
-    },
-
-    {
-      name: "Kilanas",
-      zone: "BSB",
-      lat: 4.8850,
-      lon: 114.8840
-    },
-
-    {
-      name: "Bunut",
-      zone: "BSB",
-      lat: 4.8800,
-      lon: 114.8700
-    },
-
-    {
-      name: "Tanjong Bunut",
-      zone: "BSB",
-      lat: 4.8900,
-      lon: 114.8800
-    },
-
-    {
-      name: "Madang",
-      zone: "BSB",
-      lat: 4.9600,
-      lon: 114.9300
-    },
-
-    {
-      name: "Mentiri",
-      zone: "BSB",
-      lat: 4.9800,
-      lon: 115.0200
-    },
-
-    {
-      name: "Muara",
-      zone: "BSB",
-      lat: 5.0330,
-      lon: 115.0700
-    },
-
-    {
-      name: "Berakas",
-      zone: "BSB",
-      lat: 4.9300,
-      lon: 114.9500
-    },
-
-    {
-      name: "Lambak",
-      zone: "BSB",
-      lat: 4.9500,
-      lon: 114.9500
-    },
-
-    {
-      name: "Salambigar",
-      zone: "BSB",
-      lat: 4.9650,
-      lon: 114.9700
-    },
-
-    {
-      name: "Serusop",
-      zone: "BSB",
-      lat: 4.9300,
-      lon: 114.9600
-    },
-
-    {
-      name: "Anggerek Desa",
-      zone: "BSB",
-      lat: 4.9250,
-      lon: 114.9350
-    },
-
-    {
-      name: "Katok",
-      zone: "BSB",
-      lat: 4.9050,
-      lon: 114.9700
-    },
-
-    {
-      name: "Subok",
-      zone: "BSB",
-      lat: 4.8900,
-      lon: 114.9500
-    },
+============================================================
+*/
 
 
-    // =========================
-    // TUTONG
-    // =========================
-
-    {
-      name: "Tutong",
-      zone: "TUTONG",
-      lat: 4.8030,
-      lon: 114.6500
-    },
-
-    {
-      name: "Telisai",
-      zone: "TUTONG",
-      lat: 4.7200,
-      lon: 114.5800
-    },
-
-    {
-      name: "Sungai Liang",
-      zone: "TUTONG",
-      lat: 4.7100,
-      lon: 114.5000
-    },
+let selectedService = "runner";
 
 
-    // =========================
-    // BELAIT / KB
-    // =========================
+/*
+============================================================
+KAMPONG DATABASE
+============================================================
+*/
 
-    {
-      name: "Lumut",
-      zone: "BELAIT",
-      lat: 4.6800,
-      lon: 114.5000
-    },
+const kampongs = [
 
-    {
-      name: "Seria",
-      zone: "BELAIT",
-      lat: 4.6100,
-      lon: 114.3300
-    },
+  // =========================
+  // BRUNEI-MUARA / BSB
+  // =========================
 
-    {
-      name: "Kuala Belait",
-      zone: "BELAIT",
-      lat: 4.5800,
-      lon: 114.1900
-    },
+  {
+    name: "Bandar Seri Begawan",
+    zone: "BSB",
+    lat: 4.9031,
+    lon: 114.9398
+  },
 
-    {
-      name: "Pandan",
-      zone: "BELAIT",
-      lat: 4.5900,
-      lon: 114.2100
-    },
+  {
+    name: "Gadong",
+    zone: "BSB",
+    lat: 4.9237,
+    lon: 114.9450
+  },
 
-    {
-      name: "Mumong",
-      zone: "BELAIT",
-      lat: 4.5900,
-      lon: 114.2700
-    },
+  {
+    name: "Kiulap",
+    zone: "BSB",
+    lat: 4.9038,
+    lon: 114.9270
+  },
 
-    {
-      name: "Panaga",
-      zone: "BELAIT",
-      lat: 4.6250,
-      lon: 114.2500
-    },
+  {
+    name: "Kiarong",
+    zone: "BSB",
+    lat: 4.8995,
+    lon: 114.9155
+  },
 
-    {
-      name: "Sungai Teraban",
-      zone: "BELAIT",
-      lat: 4.5800,
-      lon: 114.1500
-    },
+  {
+    name: "Menglait",
+    zone: "BSB",
+    lat: 4.9265,
+    lon: 114.9255
+  },
 
-    {
-      name: "Labi",
-      zone: "BELAIT",
-      lat: 4.6000,
-      lon: 114.4500
-    }
+  {
+    name: "Beribi",
+    zone: "BSB",
+    lat: 4.8735,
+    lon: 114.9140
+  },
 
-  ];
+  {
+    name: "Batu Bersurat",
+    zone: "BSB",
+    lat: 4.9205,
+    lon: 114.9395
+  },
+
+  {
+    name: "Tungku",
+    zone: "BSB",
+    lat: 4.9200,
+    lon: 114.9000
+  },
+
+  {
+    name: "Rimba",
+    zone: "BSB",
+    lat: 4.9440,
+    lon: 114.9060
+  },
+
+  {
+    name: "Mata-Mata",
+    zone: "BSB",
+    lat: 4.8800,
+    lon: 114.9100
+  },
+
+  {
+    name: "Jerudong",
+    zone: "BSB",
+    lat: 4.9700,
+    lon: 114.8380
+  },
+
+  {
+    name: "Sengkurong",
+    zone: "BSB",
+    lat: 4.9400,
+    lon: 114.8420
+  },
+
+  {
+    name: "Kilanas",
+    zone: "BSB",
+    lat: 4.8850,
+    lon: 114.8840
+  },
+
+  {
+    name: "Bunut",
+    zone: "BSB",
+    lat: 4.8800,
+    lon: 114.8700
+  },
+
+  {
+    name: "Tanjong Bunut",
+    zone: "BSB",
+    lat: 4.8900,
+    lon: 114.8800
+  },
+
+  {
+    name: "Madang",
+    zone: "BSB",
+    lat: 4.9600,
+    lon: 114.9300
+  },
+
+  {
+    name: "Mentiri",
+    zone: "BSB",
+    lat: 4.9800,
+    lon: 115.0200
+  },
+
+  {
+    name: "Muara",
+    zone: "BSB",
+    lat: 5.0330,
+    lon: 115.0700
+  },
+
+  {
+    name: "Berakas",
+    zone: "BSB",
+    lat: 4.9300,
+    lon: 114.9500
+  },
+
+  {
+    name: "Lambak",
+    zone: "BSB",
+    lat: 4.9500,
+    lon: 114.9500
+  },
+
+  {
+    name: "Salambigar",
+    zone: "BSB",
+    lat: 4.9650,
+    lon: 114.9700
+  },
+
+  {
+    name: "Serusop",
+    zone: "BSB",
+    lat: 4.9300,
+    lon: 114.9600
+  },
+
+  {
+    name: "Anggerek Desa",
+    zone: "BSB",
+    lat: 4.9250,
+    lon: 114.9350
+  },
+
+  {
+    name: "Katok",
+    zone: "BSB",
+    lat: 4.9050,
+    lon: 114.9700
+  },
+
+  {
+    name: "Subok",
+    zone: "BSB",
+    lat: 4.8900,
+    lon: 114.9500
+  },
 
 
-  /*
-    ------------------------------------------------------------
-    LOAD DROPDOWNS
-    ------------------------------------------------------------
-  */
+  // =========================
+  // TUTONG
+  // =========================
 
-  const pickupSelect = document.getElementById("pickup");
-  const destinationSelect = document.getElementById("destination");
+  {
+    name: "Tutong",
+    zone: "TUTONG",
+    lat: 4.8030,
+    lon: 114.6500
+  },
+
+  {
+    name: "Telisai",
+    zone: "TUTONG",
+    lat: 4.7200,
+    lon: 114.5800
+  },
+
+  {
+    name: "Sungai Liang",
+    zone: "TUTONG",
+    lat: 4.7100,
+    lon: 114.5000
+  },
 
 
-  function loadKampongs() {
+  // =========================
+  // BELAIT / KB
+  // =========================
 
-    const sorted = [...kampongs].sort((a, b) => {
+  {
+    name: "Lumut",
+    zone: "BELAIT",
+    lat: 4.6800,
+    lon: 114.5000
+  },
+
+  {
+    name: "Seria",
+    zone: "BELAIT",
+    lat: 4.6100,
+    lon: 114.3300
+  },
+
+  {
+    name: "Kuala Belait",
+    zone: "BELAIT",
+    lat: 4.5800,
+    lon: 114.1900
+  },
+
+  {
+    name: "Pandan",
+    zone: "BELAIT",
+    lat: 4.5900,
+    lon: 114.2100
+  },
+
+  {
+    name: "Mumong",
+    zone: "BELAIT",
+    lat: 4.5900,
+    lon: 114.2700
+  },
+
+  {
+    name: "Panaga",
+    zone: "BELAIT",
+    lat: 4.6250,
+    lon: 114.2500
+  },
+
+  {
+    name: "Sungai Teraban",
+    zone: "BELAIT",
+    lat: 4.5800,
+    lon: 114.1500
+  },
+
+  {
+    name: "Labi",
+    zone: "BELAIT",
+    lat: 4.6000,
+    lon: 114.4500
+  }
+
+];
+
+
+/*
+============================================================
+LOAD KAMPONGS
+============================================================
+*/
+
+const pickupSelect =
+  document.getElementById("pickup");
+
+const destinationSelect =
+  document.getElementById("destination");
+
+
+function loadKampongs() {
+
+  const sorted =
+    [...kampongs].sort((a, b) => {
 
       const zoneOrder = {
         BSB: 1,
@@ -644,486 +716,727 @@
         BELAIT: 3
       };
 
-      if (zoneOrder[a.zone] !== zoneOrder[b.zone]) {
-        return zoneOrder[a.zone] - zoneOrder[b.zone];
+      if (
+        zoneOrder[a.zone] !==
+        zoneOrder[b.zone]
+      ) {
+        return (
+          zoneOrder[a.zone] -
+          zoneOrder[b.zone]
+        );
       }
 
-      return a.name.localeCompare(b.name);
+      return a.name.localeCompare(
+        b.name
+      );
+
     });
 
 
-    sorted.forEach(kampong => {
+  sorted.forEach(kampong => {
 
-      const pickupOption = document.createElement("option");
+    const pickupOption =
+      document.createElement("option");
 
-      pickupOption.value = kampong.name;
-      pickupOption.textContent =
-        `${kampong.name} (${kampong.zone})`;
+    pickupOption.value =
+      kampong.name;
 
-      pickupSelect.appendChild(pickupOption);
+    pickupOption.textContent =
+      `${kampong.name} (${kampong.zone})`;
+
+    pickupSelect.appendChild(
+      pickupOption
+    );
 
 
-      const destinationOption = document.createElement("option");
+    const destinationOption =
+      document.createElement("option");
 
-      destinationOption.value = kampong.name;
-      destinationOption.textContent =
-        `${kampong.name} (${kampong.zone})`;
+    destinationOption.value =
+      kampong.name;
 
-      destinationSelect.appendChild(destinationOption);
+    destinationOption.textContent =
+      `${kampong.name} (${kampong.zone})`;
 
-    });
+    destinationSelect.appendChild(
+      destinationOption
+    );
+
+  });
+
+}
+
+
+loadKampongs();
+
+
+/*
+============================================================
+SERVICE SELECTION
+============================================================
+*/
+
+function selectService(service) {
+
+  selectedService = service;
+
+  const runnerBtn =
+    document.getElementById(
+      "runnerBtn"
+    );
+
+  const rideBtn =
+    document.getElementById(
+      "rideBtn"
+    );
+
+  const calculateBtn =
+    document.getElementById(
+      "calculateBtn"
+    );
+
+
+  if (service === "runner") {
+
+    runnerBtn.classList.add(
+      "active"
+    );
+
+    rideBtn.classList.remove(
+      "active"
+    );
+
+    calculateBtn.textContent =
+      "Calculate Runner Fare";
+
+  } else {
+
+    runnerBtn.classList.remove(
+      "active"
+    );
+
+    rideBtn.classList.add(
+      "active"
+    );
+
+    calculateBtn.textContent =
+      "Calculate Personal Ride Fare";
+
+  }
+
+}
+
+
+/*
+============================================================
+SWAP LOCATIONS
+============================================================
+*/
+
+function swapLocations() {
+
+  const pickup =
+    pickupSelect.value;
+
+  const destination =
+    destinationSelect.value;
+
+
+  pickupSelect.value =
+    destination;
+
+  destinationSelect.value =
+    pickup;
+
+}
+
+
+/*
+============================================================
+FIND KAMPONG
+============================================================
+*/
+
+function getKampong(name) {
+
+  return kampongs.find(
+    k => k.name === name
+  );
+
+}
+
+
+/*
+============================================================
+GET ROUTE CAP
+============================================================
+
+Returns the maximum fare for the route.
+
+BSB ↔ BSB
+    Runner: $10
+    Personal: $15
+
+BSB ↔ TUTONG
+    Both: $20
+
+BSB ↔ BELAIT
+    Both: $35
+
+Other routes:
+    No special cap
+============================================================
+*/
+
+function getRouteCap(
+  pickup,
+  destination
+) {
+
+  if (!pickup || !destination) {
+    return null;
+  }
+
+
+  const pickupZone =
+    pickup.zone;
+
+  const destinationZone =
+    destination.zone;
+
+
+  /*
+    BSB ↔ BSB
+  */
+
+  if (
+    pickupZone === "BSB" &&
+    destinationZone === "BSB"
+  ) {
+
+    return selectedService === "runner"
+      ? 10
+      : 15;
 
   }
 
 
-  loadKampongs();
-
-
   /*
-    ------------------------------------------------------------
-    SERVICE SELECTION
-    ------------------------------------------------------------
+    BSB ↔ TUTONG
   */
 
-  function selectService(service) {
+  if (
+    (
+      pickupZone === "BSB" &&
+      destinationZone === "TUTONG"
+    ) ||
+    (
+      pickupZone === "TUTONG" &&
+      destinationZone === "BSB"
+    )
+  ) {
 
-    selectedService = service;
-
-    const runnerBtn = document.getElementById("runnerBtn");
-    const rideBtn = document.getElementById("rideBtn");
-    const calculateBtn = document.getElementById("calculateBtn");
-
-    if (service === "runner") {
-
-      runnerBtn.classList.add("active");
-      rideBtn.classList.remove("active");
-
-      calculateBtn.textContent =
-        "Calculate Runner Fare";
-
-    } else {
-
-      runnerBtn.classList.remove("active");
-      rideBtn.classList.add("active");
-
-      calculateBtn.textContent =
-        "Calculate Personal Ride Fare";
-
-    }
+    return 20;
 
   }
 
 
   /*
-    ------------------------------------------------------------
-    SWAP LOCATIONS
-    ------------------------------------------------------------
+    BSB ↔ BELAIT / KB
   */
 
-  function swapLocations() {
+  if (
+    (
+      pickupZone === "BSB" &&
+      destinationZone === "BELAIT"
+    ) ||
+    (
+      pickupZone === "BELAIT" &&
+      destinationZone === "BSB"
+    )
+  ) {
 
-    const pickup = pickupSelect.value;
-    const destination = destinationSelect.value;
-
-    pickupSelect.value = destination;
-    destinationSelect.value = pickup;
+    return 35;
 
   }
 
 
   /*
-    ------------------------------------------------------------
-    FIND KAMPONG
-    ------------------------------------------------------------
+    No special maximum.
   */
 
-  function getKampong(name) {
+  return null;
 
-    return kampongs.find(k => k.name === name);
+}
+
+
+/*
+============================================================
+FARE CALCULATION
+============================================================
+
+BASE TARIFF:
+
+0–5 km:
+    $5
+
+5–20 km:
+    $5 + $0.35/km after 5 km
+
+Above 20 km:
+    $5
+    + 15 × $0.35
+    + remaining km × $0.60
+
+Then:
+
+1. Round to whole dollar
+2. Apply route maximum if applicable
+============================================================
+*/
+
+function calculateStandardFare(
+  distanceKm
+) {
+
+  let rawFare;
+
+
+  if (distanceKm <= 5) {
+
+    rawFare = 5;
+
+  }
+
+  else if (distanceKm <= 20) {
+
+    const extraKm =
+      distanceKm - 5;
+
+    rawFare =
+      5 +
+      (extraKm * 0.35);
+
+  }
+
+  else {
+
+    const middleKm = 15;
+
+    const extraKm =
+      distanceKm - 20;
+
+    rawFare =
+      5 +
+      (middleKm * 0.35) +
+      (extraKm * 0.60);
 
   }
 
 
   /*
-    ------------------------------------------------------------
-    FARE CALCULATION
-    ------------------------------------------------------------
-
-    PREVIOUS TARIFF:
-
-    Runner:
-      Minimum = $5
-      5–20 km = $0.40/km
-      Above 20 km = $0.65/km
-
-    Personal Ride:
-      Minimum = $5
-      5–20 km = $0.42/km
-      Above 20 km = $0.70/km
-
-
-    BSB MAXIMUM:
-
-      Runner = $10
-      Personal Ride = $15
-
-    IMPORTANT:
-
-      The fare is NOT rejected if it exceeds the maximum.
-
-      It is CAPPED at the maximum.
-
-      Example:
-
-      Runner calculated = $12.40
-      Final = $10
-
-      Personal Ride calculated = $18.60
-      Final = $15
-
-      All fares are whole numbers.
+    Whole-number pricing
   */
 
-
-  function calculateStandardFare(distanceKm) {
-
-    let rawFare;
+  let fare =
+    Math.round(rawFare);
 
 
-    if (selectedService === "runner") {
+  /*
+    Find route cap
+  */
 
-      if (distanceKm <= 5) {
+  const pickup =
+    getKampong(
+      pickupSelect.value
+    );
 
-        rawFare = 5;
-
-      } else if (distanceKm <= 20) {
-
-        rawFare = distanceKm * 0.40;
-
-      } else {
-
-        rawFare = distanceKm * 0.65;
-
-      }
+  const destination =
+    getKampong(
+      destinationSelect.value
+    );
 
 
-    } else {
-
-      if (distanceKm <= 5) {
-
-        rawFare = 5;
-
-      } else if (distanceKm <= 20) {
-
-        rawFare = distanceKm * 0.42;
-
-      } else {
-
-        rawFare = distanceKm * 0.70;
-
-      }
-
-    }
+  const maximum =
+    getRouteCap(
+      pickup,
+      destination
+    );
 
 
-    // Minimum fare
-    rawFare = Math.max(5, rawFare);
+  /*
+    Apply cap
+  */
+
+  if (maximum !== null) {
+
+    fare =
+      Math.min(
+        fare,
+        maximum
+      );
+
+  }
 
 
-    // Whole number
-    let fare = Math.round(rawFare);
+  return {
+    fare,
+    rawFare,
+    maximum
+  };
+
+}
+
+
+/*
+============================================================
+OSRM ROUTING
+============================================================
+*/
+
+async function getRoadRoute(
+  pickup,
+  destination
+) {
+
+  const coordinates =
+    `${pickup.lon},${pickup.lat};` +
+    `${destination.lon},${destination.lat}`;
+
+
+  const url =
+    `https://router.project-osrm.org/route/v1/driving/${coordinates}` +
+    `?overview=false&steps=false&alternatives=false`;
+
+
+  const response =
+    await fetch(url);
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Unable to calculate the road route right now."
+    );
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  if (
+    data.code !== "Ok" ||
+    !data.routes ||
+    !data.routes.length
+  ) {
+
+    throw new Error(
+      "No road route could be found for this route."
+    );
+
+  }
+
+
+  const route =
+    data.routes[0];
+
+
+  return {
+
+    distanceKm:
+      route.distance / 1000,
+
+    durationMinutes:
+      route.duration / 60
+
+  };
+
+}
+
+
+/*
+============================================================
+FORMAT TIME
+============================================================
+*/
+
+function formatDuration(
+  minutes
+) {
+
+  const rounded =
+    Math.round(minutes);
+
+
+  if (rounded < 60) {
+
+    return `${rounded} min`;
+
+  }
+
+
+  const hours =
+    Math.floor(
+      rounded / 60
+    );
+
+  const remaining =
+    rounded % 60;
+
+
+  if (remaining === 0) {
+
+    return `${hours} hr`;
+
+  }
+
+
+  return (
+    `${hours} hr ${remaining} min`
+  );
+
+}
+
+
+/*
+============================================================
+MAIN CALCULATION
+============================================================
+*/
+
+async function calculateFare() {
+
+  const pickupName =
+    pickupSelect.value;
+
+  const destinationName =
+    destinationSelect.value;
+
+
+  const errorBox =
+    document.getElementById(
+      "error"
+    );
+
+  const result =
+    document.getElementById(
+      "result"
+    );
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
+
+  const calculateBtn =
+    document.getElementById(
+      "calculateBtn"
+    );
+
+
+  errorBox.style.display =
+    "none";
+
+  result.style.display =
+    "none";
+
+
+  if (
+    !pickupName ||
+    !destinationName
+  ) {
+
+    errorBox.textContent =
+      "Please select both pickup and destination.";
+
+    errorBox.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  if (
+    pickupName === destinationName
+  ) {
+
+    errorBox.textContent =
+      "Pickup and destination cannot be the same.";
+
+    errorBox.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  const pickup =
+    getKampong(
+      pickupName
+    );
+
+  const destination =
+    getKampong(
+      destinationName
+    );
+
+
+  if (
+    !pickup ||
+    !destination
+  ) {
+
+    errorBox.textContent =
+      "Invalid kampong selection.";
+
+    errorBox.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  calculateBtn.disabled =
+    true;
+
+  loading.style.display =
+    "block";
+
+
+  try {
+
+    /*
+      Actual road route
+    */
+
+    const route =
+      await getRoadRoute(
+        pickup,
+        destination
+      );
 
 
     /*
-      BSB MAXIMUM
-
-      Only applies when BOTH pickup and destination
-      are inside the BSB zone.
+      Community fare
     */
 
-    const pickup = getKampong(pickupSelect.value);
-    const destination = getKampong(destinationSelect.value);
-
-
-    const isBSB =
-      pickup &&
-      destination &&
-      pickup.zone === "BSB" &&
-      destination.zone === "BSB";
-
-
-    if (isBSB) {
-
-      const maximum =
-        selectedService === "runner"
-          ? 10
-          : 15;
-
-
-      // CAP the fare
-      fare = Math.min(fare, maximum);
-
-    }
-
-
-    return {
-      fare,
-      rawFare,
-      isBSB
-    };
-
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    OSRM ROUTING
-    ------------------------------------------------------------
-
-    Uses actual road distance and estimated drive time.
-
-    No map is displayed.
-  */
-
-  async function getRoadRoute(pickup, destination) {
-
-    const coordinates =
-      `${pickup.lon},${pickup.lat};${destination.lon},${destination.lat}`;
-
-
-    const url =
-      `https://router.project-osrm.org/route/v1/driving/${coordinates}` +
-      `?overview=false&steps=false&alternatives=false`;
-
-
-    const response = await fetch(url);
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        "Unable to calculate the road route right now."
+    const fareData =
+      calculateStandardFare(
+        route.distanceKm
       );
 
-    }
+
+    /*
+      Service
+    */
+
+    document.getElementById(
+      "serviceResult"
+    ).textContent =
+      selectedService === "runner"
+        ? "📦 Runner"
+        : "🚗 Personal Ride";
 
 
-    const data = await response.json();
+    /*
+      Route
+    */
+
+    document.getElementById(
+      "routeName"
+    ).textContent =
+      `${pickup.name} → ${destination.name}`;
+
+
+    /*
+      Final fare
+    */
+
+    document.getElementById(
+      "fare"
+    ).textContent =
+      `BND $${fareData.fare}`;
+
+
+    /*
+      Distance
+    */
+
+    document.getElementById(
+      "distance"
+    ).textContent =
+      `${route.distanceKm.toFixed(1)} km`;
+
+
+    /*
+      Time
+    */
+
+    document.getElementById(
+      "duration"
+    ).textContent =
+      formatDuration(
+        route.durationMinutes
+      );
+
+
+    /*
+      Pricing explanation
+    */
+
+    let basisText =
+      `Community tariff: $5 first 5 km, ` +
+      `$0.35/km from 5–20 km, ` +
+      `$0.60/km above 20 km.`;
 
 
     if (
-      data.code !== "Ok" ||
-      !data.routes ||
-      !data.routes.length
+      fareData.maximum !== null
     ) {
 
-      throw new Error(
-        "No road route could be found for this route."
-      );
+      basisText +=
+        ` Route maximum: BND $${fareData.maximum}.`;
 
     }
 
 
-    const route = data.routes[0];
+    document.getElementById(
+      "basis"
+    ).textContent =
+      basisText;
 
 
-    return {
-      distanceKm: route.distance / 1000,
-      durationMinutes: route.duration / 60
-    };
+    result.style.display =
+      "block";
+
+
+  } catch (error) {
+
+    errorBox.textContent =
+      error.message ||
+      "Something went wrong while calculating the route.";
+
+    errorBox.style.display =
+      "block";
 
   }
 
+  finally {
 
-  /*
-    ------------------------------------------------------------
-    FORMAT DRIVE TIME
-    ------------------------------------------------------------
-  */
+    calculateBtn.disabled =
+      false;
 
-  function formatDuration(minutes) {
-
-    const rounded = Math.round(minutes);
-
-
-    if (rounded < 60) {
-
-      return `${rounded} min`;
-
-    }
-
-
-    const hours = Math.floor(rounded / 60);
-    const remaining = rounded % 60;
-
-
-    if (remaining === 0) {
-
-      return `${hours} hr`;
-
-    }
-
-
-    return `${hours} hr ${remaining} min`;
+    loading.style.display =
+      "none";
 
   }
 
-
-  /*
-    ------------------------------------------------------------
-    MAIN CALCULATION
-    ------------------------------------------------------------
-  */
-
-  async function calculateFare() {
-
-    const pickupName = pickupSelect.value;
-    const destinationName = destinationSelect.value;
-
-
-    const errorBox = document.getElementById("error");
-    const result = document.getElementById("result");
-    const loading = document.getElementById("loading");
-    const calculateBtn = document.getElementById("calculateBtn");
-
-
-    errorBox.style.display = "none";
-    result.style.display = "none";
-
-
-    if (!pickupName || !destinationName) {
-
-      errorBox.textContent =
-        "Please select both pickup and destination.";
-
-      errorBox.style.display = "block";
-
-      return;
-
-    }
-
-
-    if (pickupName === destinationName) {
-
-      errorBox.textContent =
-        "Pickup and destination cannot be the same.";
-
-      errorBox.style.display = "block";
-
-      return;
-
-    }
-
-
-    const pickup = getKampong(pickupName);
-    const destination = getKampong(destinationName);
-
-
-    if (!pickup || !destination) {
-
-      errorBox.textContent =
-        "Invalid kampong selection.";
-
-      errorBox.style.display = "block";
-
-      return;
-
-    }
-
-
-    calculateBtn.disabled = true;
-    loading.style.display = "block";
-
-
-    try {
-
-      /*
-        Get actual road distance/time.
-      */
-
-      const route =
-        await getRoadRoute(pickup, destination);
-
-
-      /*
-        Calculate fare.
-      */
-
-      const fareData =
-        calculateStandardFare(route.distanceKm);
-
-
-      /*
-        Update result.
-      */
-
-      document.getElementById("serviceResult").textContent =
-        selectedService === "runner"
-          ? "📦 Runner"
-          : "🚗 Personal Ride";
-
-
-      document.getElementById("routeName").textContent =
-        `${pickup.name} → ${destination.name}`;
-
-
-      document.getElementById("fare").textContent =
-        `BND $${fareData.fare}`;
-
-
-      document.getElementById("distance").textContent =
-        `${route.distanceKm.toFixed(1)} km`;
-
-
-      document.getElementById("duration").textContent =
-        formatDuration(route.durationMinutes);
-
-
-      /*
-        Explain tariff.
-      */
-
-      const maximum =
-        selectedService === "runner"
-          ? 10
-          : 15;
-
-
-      if (fareData.isBSB) {
-
-        document.getElementById("basis").textContent =
-          `Community tariff applied. ` +
-          `${selectedService === "runner" ? "Runner" : "Personal Ride"} ` +
-          `fare capped at BND $${maximum} around BSB.`;
-
-      } else {
-
-        document.getElementById("basis").textContent =
-          `Community tariff applied. ` +
-          `No BSB maximum cap applied outside the BSB zone.`;
-
-      }
-
-
-      result.style.display = "block";
-
-
-    } catch (error) {
-
-      errorBox.textContent =
-        error.message ||
-        "Something went wrong while calculating the route.";
-
-      errorBox.style.display = "block";
-
-    } finally {
-
-      calculateBtn.disabled = false;
-      loading.style.display = "none";
-
-    }
-
-  }
+}
 
 </script>
 
